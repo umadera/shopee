@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopee Seller Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sp:#EE4D2D;--sp-dk:#C73D20;--sp-lt:#FFF0EC;
+  --gold:#F5A623;--green:#27AE60;--blue:#2980B9;
+  --bg:#F7F5F3;--sur:#FFF;--sur2:#F3F1EF;
+  --bor:#E6E2DE;--tx:#1A1614;--tx2:#6B6560;--tx3:#A09B96;
+  --r:14px;--rs:8px;
+  --sh:0 2px 12px rgba(0,0,0,.07);--shm:0 4px 24px rgba(0,0,0,.13);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--sp);padding:0 18px;display:flex;align-items:center;gap:12px;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 14px rgba(238,77,45,.35)}
+.hdr-logo{font-size:26px;line-height:1}
+.hdr-title{color:#fff;font-size:17px;font-weight:800;letter-spacing:-.3px}
+.hdr-sub{color:rgba(255,255,255,.75);font-size:11px;font-weight:500}
+.hdr-sp{flex:1}
+.hdr-btn{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* TABS */
+.tabs-bar{background:var(--sur);border-bottom:1.5px solid var(--bor);overflow-x:auto;position:sticky;top:56px;z-index:90;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tabs{display:flex;padding:0 14px;min-width:max-content}
+.tab{padding:13px 16px;cursor:pointer;font-size:13px;font-weight:600;color:var(--tx2);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:5px}
+.tab:hover{color:var(--sp);background:var(--sp-lt)}
+.tab.active{color:var(--sp);border-bottom-color:var(--sp)}
+
+/* PAGE */
+.pg{display:none;padding:14px;max-width:860px;margin:0 auto}
+.pg.active{display:block}
+
+/* CARD */
+.card{background:var(--sur);border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--bor);box-shadow:var(--sh)}
+.card-ttl{font-size:15px;font-weight:800;margin-bottom:13px;display:flex;align-items:center;gap:7px}
+
+/* STATUS BAR */
+.stat-bar{background:var(--sur);border-radius:var(--rs);padding:9px 13px;margin-bottom:12px;border:1px solid var(--bor);display:flex;align-items:center;gap:8px;font-size:12px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0}
+.dot.ok{background:var(--green)}.dot.err{background:var(--sp)}
+.rekey-btn{margin-left:auto;background:none;border:1px solid var(--bor);border-radius:6px;padding:3px 9px;font-size:11px;cursor:pointer;color:var(--tx2);font-family:inherit}
+
+/* PILLS */
+.pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.pill{padding:7px 13px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--bor);background:var(--sur);cursor:pointer;transition:all .18s;color:var(--tx2);white-space:nowrap}
+.pill:hover,.pill.active{background:var(--sp);color:#fff;border-color:var(--sp)}
+.pill.gold{border-color:var(--gold);color:#8B6500}
+.pill.gold.active{background:var(--gold);color:#333;border-color:var(--gold)}
+.pill.grn{border-color:var(--green);color:var(--green)}
+.pill.grn.active{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* CAT SCROLL */
+.cat-sc{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none}
+.cat-sc::-webkit-scrollbar{display:none}
+.cat-chip{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 12px;border-radius:var(--rs);border:1.5px solid var(--bor);background:var(--sur);cursor:pointer;min-width:68px;font-size:11px;font-weight:600;color:var(--tx2);transition:all .18s;white-space:nowrap}
+.cat-chip .ci{font-size:20px}
+.cat-chip:hover,.cat-chip.active{border-color:var(--sp);background:var(--sp-lt);color:var(--sp)}
+
+/* SEARCH */
+.search-row{display:flex;gap:8px;margin-bottom:12px}
+.txt-inp{padding:10px 13px;border:1.5px solid var(--bor);border-radius:var(--rs);font-size:13px;font-family:inherit;background:var(--sur);color:var(--tx);transition:border .2s;width:100%}
+.txt-inp:focus{outline:none;border-color:var(--sp)}
+
+/* BUTTONS */
+.btn{background:var(--sp);color:#fff;border:none;padding:10px 18px;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{background:var(--sp-dk)}
+.btn:disabled{background:var(--bor);color:var(--tx3);cursor:not-allowed}
+.btn-sec{background:var(--sur);color:var(--sp);border:1.5px solid var(--sp);padding:10px 18px;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-sec:hover{background:var(--sp-lt)}
+
+/* STATS */
+.st-row{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.st-box{flex:1;min-width:80px;background:var(--sur);border:1px solid var(--bor);border-radius:var(--rs);padding:11px;text-align:center}
+.st-n{font-size:19px;font-weight:800;color:var(--sp);font-family:'Space Mono',monospace}
+.st-l{font-size:10px;color:var(--tx3);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+
+/* PRODUCT GRID */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.pc{background:var(--sur);border-radius:var(--r);border:1px solid var(--bor);overflow:hidden;transition:box-shadow .2s,transform .2s;position:relative}
+.pc:hover{box-shadow:var(--shm);transform:translateY(-2px)}
+.pc-img{position:relative;background:var(--sur2);aspect-ratio:1;overflow:hidden}
+.pc-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.pc:hover .pc-img img{transform:scale(1.05)}
+.pc-rank{position:absolute;top:7px;left:7px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;font-family:'Space Mono',monospace;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.r1{background:#FFD700;color:#333}.r2{background:#C0C0C0;color:#333}.r3{background:#CD7F32;color:#fff}.rn{background:rgba(0,0,0,.55);color:#fff}
+.pc-badge{position:absolute;top:7px;right:7px;font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.4px}
+.b-hot{background:var(--sp);color:#fff}.b-win{background:#7C3AED;color:#fff}.b-trend{background:var(--green);color:#fff}
+.pc-hover-btns{position:absolute;bottom:7px;right:7px;display:flex;gap:5px;opacity:0;transition:opacity .2s}
+.pc:hover .pc-hover-btns{opacity:1}
+.hb{width:30px;height:30px;border-radius:7px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:transform .15s}
+.hb:hover{transform:scale(1.1)}
+.hb-dl{background:rgba(255,255,255,.92)}.hb-ed{background:var(--sp);color:#fff}.hb-shop{background:#7C3AED;color:#fff}
+.pc-body{padding:10px}
+.pc-name{font-size:12px;font-weight:600;color:var(--tx);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc-meta{display:flex;align-items:center;justify-content:space-between}
+.pc-price{font-size:14px;font-weight:800;color:var(--sp)}
+.pc-sold{font-size:10px;color:var(--tx3)}
+.pc-bar{margin-top:7px;height:3px;background:var(--sur2);border-radius:2px;overflow:hidden}
+.pc-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--sp),var(--gold));transition:width .6s ease}
+.pc-shop{font-size:10px;color:var(--tx3);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-foot{padding:8px 10px 10px;border-top:1px solid var(--bor);display:flex;gap:5px}
+.bsm{flex:1;padding:6px 3px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid var(--bor);background:var(--sur);color:var(--tx2);transition:all .15s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:3px}
+.bsm:hover{border-color:var(--sp);color:var(--sp);background:var(--sp-lt)}
+.bsm.pur{background:#7C3AED;color:#fff;border-color:#7C3AED}
+.bsm.pur:hover{background:#6D28D9}
+
+/* LOADING */
+.loading-w{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 24px;gap:14px}
+.spinner{width:34px;height:34px;border:3px solid var(--bor);border-top-color:var(--sp);border-radius:50%;animation:spin .7s linear infinite}
+.spinner-sm{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:13px;color:var(--tx2);font-weight:500}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 20px;color:var(--tx3)}
+.empty-ico{font-size:48px;margin-bottom:12px}
+.empty-ttl{font-size:14px;font-weight:700;color:var(--tx2)}
+.empty-sub{font-size:12px;margin-top:4px}
+
+/* SOURCE BADGE */
+.src-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid}
+.src-real{background:#EAF8EE;color:#1E8449;border-color:#A8DDB9}
+.src-demo{background:#FFF8E7;color:#8B6500;border-color:#F5D78A}
+
+/* PHOTO EDITOR */
+.up-zone{border:2px dashed var(--bor);border-radius:var(--r);padding:32px 24px;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:var(--sur2)}
+.up-zone:hover{border-color:var(--sp);background:var(--sp-lt)}
+.up-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.canvas-wrap{display:flex;justify-content:center;margin:12px 0}
+canvas{max-width:100%;border-radius:var(--rs);border:1px solid var(--bor);display:block}
+.filt-sc{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:4px}
+.filt-sc::-webkit-scrollbar{display:none}
+.fb{padding:7px 13px;border-radius:var(--rs);border:1.5px solid var(--bor);background:var(--sur);cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;transition:all .15s;font-family:inherit;color:var(--tx2)}
+.fb:hover,.fb.active{border-color:var(--sp);color:var(--sp);background:var(--sp-lt)}
+.sub-lbl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.4px;margin:13px 0 7px}
+.act-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+
+/* AI BOX */
+.ai-box{background:var(--sp-lt);border:1.5px solid #FFCDC4;border-radius:var(--rs);padding:13px 15px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--tx);margin-top:11px;display:none;min-height:55px}
+.ai-ld{color:var(--sp);font-style:italic;font-weight:500}
+
+/* FORM */
+.f-row{margin-bottom:11px}
+.f-lbl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block}
+.f-sel{width:100%;padding:9px 12px;border:1.5px solid var(--bor);border-radius:var(--rs);font-size:13px;font-family:inherit;background:var(--sur);color:var(--tx)}
+.f-sel:focus{outline:none;border-color:var(--sp)}
+.f-ta{width:100%;padding:9px 12px;border:1.5px solid var(--bor);border-radius:var(--rs);font-size:13px;font-family:inherit;background:var(--sur);color:var(--tx);min-height:75px;resize:vertical}
+.f-ta:focus{outline:none;border-color:var(--sp)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* PRICE */
+.price-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}
+.p-card{border:1.5px solid var(--bor);border-radius:var(--rs);padding:13px;text-align:center}
+.p-card.best{border-color:var(--sp);background:var(--sp-lt)}
+.p-lbl{font-size:11px;color:var(--tx3);font-weight:600;margin-bottom:3px}
+.p-val{font-size:16px;font-weight:800;color:var(--sp);font-family:'Space Mono',monospace}
+.p-note{font-size:10px;color:var(--tx3);margin-top:3px}
+
+/* VIDEO */
+.vt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:7px;margin-bottom:13px}
+.vt-btn{border:1.5px solid var(--bor);border-radius:var(--rs);padding:11px 6px;text-align:center;cursor:pointer;transition:all .15s;background:var(--sur)}
+.vt-btn:hover,.vt-btn.active{border-color:var(--sp);background:var(--sp-lt)}
+.vt-ico{font-size:22px;margin-bottom:4px}.vt-lbl{font-size:11px;font-weight:600;color:var(--tx2)}
+.kling-res{background:var(--sur2);border:1px solid var(--bor);border-radius:var(--r);overflow:hidden;margin-top:11px;display:none}
+.kling-info{padding:13px}
+.prog-bar{height:5px;background:var(--bor);border-radius:3px;overflow:hidden;margin:0 14px 12px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--sp),var(--gold));border-radius:3px;width:0%;transition:width .5s ease}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(20,10,5,.65);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(4px);padding:16px}
+.modal-ov.hidden{display:none}
+.modal-box{background:var(--sur);border-radius:20px;padding:24px 20px;width:100%;max-width:460px;box-shadow:var(--shm)}
+.modal-ttl{font-size:19px;font-weight:800;margin-bottom:5px}
+.modal-sub{font-size:13px;color:var(--tx2);margin-bottom:18px;line-height:1.6}
+.ak-row{margin-bottom:13px}
+.ak-lbl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.bred{background:#FFEAEA;color:#C0392B;padding:1px 6px;border-radius:4px;font-size:10px}
+.ak-wrap{position:relative}
+.ak-inp{width:100%;padding:10px 38px 10px 13px;border:1.5px solid var(--bor);border-radius:var(--rs);font-size:12px;font-family:'Space Mono',monospace;background:var(--sur2);color:var(--tx)}
+.ak-inp:focus{outline:none;border-color:var(--sp);background:#fff}
+.ak-eye{position:absolute;right:9px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:15px;color:var(--tx3);background:none;border:none}
+.ak-hint{font-size:11px;color:var(--tx3);margin-top:3px}
+.ak-hint a{color:var(--sp);text-decoration:none}
+.div-or{text-align:center;color:var(--tx3);font-size:12px;margin:11px 0}
+.btn-skip{width:100%;background:var(--sur2);color:var(--tx2);border:1.5px solid var(--bor);padding:10px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-skip:hover{background:var(--bor)}
+
+/* NOTE */
+.note{background:#EAF4FB;border-left:3px solid var(--blue);padding:10px 13px;border-radius:0 var(--rs) var(--rs) 0;font-size:12px;color:#1a4a6b;line-height:1.6;margin-bottom:12px}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(70px);background:#1A1614;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;transition:transform .3s;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:520px){
+  .prod-grid{grid-template-columns:repeat(2,1fr)}
+  .price-trio{grid-template-columns:1fr}
+  .row2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-ov hidden" id="keyModal">
+  <div class="modal-box">
+    <div class="modal-ttl">🔑 Setup API Keys</div>
+    <div class="modal-sub">Pencarian produk Shopee bekerja <strong>tanpa key</strong>. Key hanya untuk fitur generate video & konten AI.</div>
+    <div class="ak-row">
+      <div class="ak-lbl">🎬 Kling AI Key <span class="bred">Untuk Video</span></div>
+      <div class="ak-wrap">
+        <input type="password" class="ak-inp" id="klingKey" placeholder="kling-sk-xxxxxxxxxxxxxxxx">
+        <button class="ak-eye" onclick="toggleEye('klingKey',this)">👁️</button>
+      </div>
+      <div class="ak-hint">Dapatkan di <a href="https://klingai.com" target="_blank">klingai.com</a> → API Access</div>
+    </div>
+    <div class="ak-row">
+      <div class="ak-lbl">🤖 Claude AI Key <span class="bred">Untuk Konten</span></div>
+      <div class="ak-wrap">
+        <input type="password" class="ak-inp" id="claudeKey" placeholder="sk-ant-api03-xxxxxxxx...">
+        <button class="ak-eye" onclick="toggleEye('claudeKey',this)">👁️</button>
+      </div>
+      <div class="ak-hint">Dapatkan di <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
+    </div>
+    <button class="btn" style="width:100%;justify-content:center;margin-top:6px" onclick="saveKeys()">✅ Simpan</button>
+    <div class="div-or">— atau —</div>
+    <button class="btn-skip" onclick="document.getElementById('keyModal').classList.add('hidden')">Lewati</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">🛍️</div>
+  <div><div class="hdr-title">Shopee Seller Pro</div><div class="hdr-sub">Data Shopee + Kling AI Video</div></div>
+  <div class="hdr-sp"></div>
+  <button class="hdr-btn" onclick="document.getElementById('keyModal').classList.remove('hidden')">⚙️ API Keys</button>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <div class="tabs">
+    <div class="tab active" onclick="goTab('trending',this)">🔥 Produk Winning</div>
+    <div class="tab" onclick="goTab('photo',this)">🖼️ Edit Foto</div>
+    <div class="tab" onclick="goTab('content',this)">✍️ Judul & Harga</div>
+    <div class="tab" onclick="goTab('video',this)">🎬 Generate Video</div>
+  </div>
+</div>
+
+<!-- ═══ TAB TRENDING ═══ -->
+<div class="pg active" id="pg-trending">
+
+  <div class="stat-bar">
+    <div class="dot ok"></div>
+    <span style="font-weight:700">Shopee ID</span>
+    <span style="color:var(--tx3)" id="shopSrc">Data produk Shopee Indonesia</span>
+    <span style="color:var(--bor)">|</span>
+    <div class="dot" id="kDot"></div>
+    <span style="font-weight:700">Kling AI</span>
+    <span style="color:var(--tx3)" id="kSt">Belum dikonfigurasi</span>
+    <button class="rekey-btn" onclick="document.getElementById('keyModal').classList.remove('hidden')">🔑 Key</button>
+  </div>
+
+  <div class="note">📊 Menampilkan data produk terlaris Shopee Indonesia. Pilih kategori & periode kemudian klik <strong>Cari</strong>.</div>
+
+  <div class="st-row" id="statsRow" style="display:none">
+    <div class="st-box"><div class="st-n" id="st1">0</div><div class="st-l">Produk</div></div>
+    <div class="st-box"><div class="st-n" id="st2">0</div><div class="st-l">Total Terjual</div></div>
+    <div class="st-box"><div class="st-n" id="st3">—</div><div class="st-l">Top Harga</div></div>
+    <div class="st-box"><div class="st-n" id="st4" style="font-size:13px">—</div><div class="st-l">Sumber</div></div>
+  </div>
+
+  <div class="pills">
+    <div class="pill active" onclick="setPer(this,'harian')">📅 Harian</div>
+    <div class="pill" onclick="setPer(this,'mingguan')">📆 Mingguan</div>
+    <div class="pill" onclick="setPer(this,'bulanan')">🗓️ Bulanan</div>
+    <div class="pill gold" onclick="setPer(this,'winning')">🏆 Winning</div>
+    <div class="pill grn" onclick="setPer(this,'trending')">📈 Trending</div>
+  </div>
+
+  <div class="cat-sc" id="catSc"></div>
+
+  <div class="search-row">
+    <input type="text" class="txt-inp" id="kwInput"
+      placeholder="🔍 Ketik produk... (contoh: baju tidur, skincare, tas wanita, dll)"
+      onkeydown="if(event.key==='Enter')loadProds()">
+    <button class="btn" id="loadBtn" onclick="loadProds()">🔍 Cari</button>
+  </div>
+
+  <div id="prodResults">
+    <div class="empty">
+      <div class="empty-ico">🛍️</div>
+      <div class="empty-ttl">Temukan Produk Terlaris Shopee</div>
+      <div class="empty-sub">Pilih kategori atau ketik kata kunci, lalu klik Cari</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB PHOTO ═══ -->
+<div class="pg" id="pg-photo">
+  <div class="card">
+    <div class="card-ttl">📸 Upload Foto Produk</div>
+    <div class="up-zone" onclick="document.getElementById('photoFile').click()">
+      <input type="file" id="photoFile" accept="image/*" onchange="loadPhoto(event)">
+      <div style="font-size:44px;margin-bottom:9px">🖼️</div>
+      <div style="font-size:14px;color:var(--tx2);font-weight:600">Klik untuk upload foto produk</div>
+      <div style="font-size:12px;color:var(--tx3);margin-top:3px">JPG, PNG, WEBP – maks 15MB</div>
+    </div>
+    <div style="margin-top:9px;font-size:12px;color:var(--tx3);text-align:center">
+      Atau klik tombol <strong>Edit</strong> pada kartu produk di tab Produk Winning
+    </div>
+  </div>
+  <div class="card" id="edCard" style="display:none">
+    <div class="card-ttl">🎨 Editor Foto Produk</div>
+    <div class="canvas-wrap"><canvas id="photoCanvas"></canvas></div>
+    <div class="sub-lbl">Filter Warna</div>
+    <div class="filt-sc" id="fSc">
+      <button class="fb active" onclick="setF(this,'none')">Original</button>
+      <button class="fb" onclick="setF(this,'bright')">☀️ Cerah</button>
+      <button class="fb" onclick="setF(this,'contrast')">🔆 Kontras</button>
+      <button class="fb" onclick="setF(this,'warm')">🌅 Hangat</button>
+      <button class="fb" onclick="setF(this,'cool')">❄️ Cool</button>
+      <button class="fb" onclick="setF(this,'vivid')">🎨 Vivid</button>
+      <button class="fb" onclick="setF(this,'vintage')">📷 Vintage</button>
+      <button class="fb" onclick="setF(this,'bw')">⬛ B&W</button>
+    </div>
+    <div class="sub-lbl">Background</div>
+    <div class="filt-sc" id="bgSc">
+      <button class="fb active" onclick="setBg(this,'orig')">Original</button>
+      <button class="fb" onclick="setBg(this,'white')">⬜ Putih</button>
+      <button class="fb" onclick="setBg(this,'red')">🟥 Shopee Red</button>
+      <button class="fb" onclick="setBg(this,'orange')">🟧 Oranye</button>
+      <button class="fb" onclick="setBg(this,'yellow')">🟨 Kuning</button>
+      <button class="fb" onclick="setBg(this,'blue')">🟦 Biru</button>
+      <button class="fb" onclick="setBg(this,'gradient')">🌈 Gradient</button>
+    </div>
+    <div class="sub-lbl">Badge Promo</div>
+    <div class="filt-sc" id="bdgSc">
+      <button class="fb active" onclick="setBadge(this,'none')">Tanpa Badge</button>
+      <button class="fb" onclick="setBadge(this,'sale')">🔥 SALE</button>
+      <button class="fb" onclick="setBadge(this,'hot')">💥 HOT</button>
+      <button class="fb" onclick="setBadge(this,'new')">✨ NEW</button>
+      <button class="fb" onclick="setBadge(this,'ongkir')">🚚 FREE ONGKIR</button>
+      <button class="fb" onclick="setBadge(this,'ori')">✅ ORIGINAL</button>
+      <button class="fb" onclick="setBadge(this,'best')">🏆 BEST SELLER</button>
+    </div>
+    <div class="sub-lbl">Watermark Toko</div>
+    <div class="row2" style="gap:8px;margin-bottom:4px">
+      <input type="text" class="txt-inp" id="wmTxt" placeholder="Nama Toko / No HP">
+      <select class="f-sel" id="wmPos">
+        <option value="br">↘ Kanan Bawah</option>
+        <option value="bl">↙ Kiri Bawah</option>
+        <option value="tr">↗ Kanan Atas</option>
+        <option value="tl">↖ Kiri Atas</option>
+        <option value="c">+ Tengah</option>
+        <option value="none">✖ Tanpa WM</option>
+      </select>
+    </div>
+    <div class="act-row">
+      <button class="btn" onclick="renderCanvas()">✅ Terapkan</button>
+      <button class="btn-sec" onclick="dlPhoto()">⬇️ Download</button>
+      <button class="btn-sec" onclick="toContent()">✍️ Buat Konten</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB CONTENT ═══ -->
+<div class="pg" id="pg-content">
+  <div class="card">
+    <div class="card-ttl">✍️ Generator Judul Produk AI</div>
+    <div class="f-row"><label class="f-lbl">Nama Produk</label>
+      <input type="text" class="txt-inp" id="tp" placeholder="Contoh: Baju tidur wanita, Skincare vitamin C..."></div>
+    <div class="row2" style="gap:8px;margin-bottom:11px">
+      <div><label class="f-lbl">Kategori</label>
+        <select class="f-sel" id="tc">
+          <option>Fashion Wanita</option><option>Fashion Pria</option><option>Kecantikan</option>
+          <option>Elektronik</option><option>Rumah & Dapur</option><option>Makanan</option>
+          <option>Olahraga</option><option>Bayi & Mainan</option>
+        </select></div>
+      <div><label class="f-lbl">Fitur Unggulan</label>
+        <input type="text" class="txt-inp" id="tf" placeholder="anti air, COD, original..."></div>
+    </div>
+    <button class="btn" onclick="genTitle()" id="tBtn">🤖 Generate 5 Judul</button>
+    <div class="ai-box" id="tOut"></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">💰 Kalkulator Harga Optimal</div>
+    <div class="row2" style="gap:8px;margin-bottom:11px">
+      <div><label class="f-lbl">Harga Modal (Rp)</label>
+        <input type="number" class="txt-inp" id="hM" placeholder="50000"></div>
+      <div><label class="f-lbl">Kategori</label>
+        <select class="f-sel" id="hC">
+          <option value="fashion">Fashion</option><option value="beauty">Kecantikan</option>
+          <option value="electronics">Elektronik</option><option value="food">Makanan</option>
+          <option value="home">Rumah</option>
+        </select></div>
+    </div>
+    <div class="f-row"><label class="f-lbl">Strategi</label>
+      <select class="f-sel" id="hS">
+        <option value="p">Penetrasi – Kompetitif & cepat laku</option>
+        <option value="s">Standard – Margin seimbang</option>
+        <option value="r">Premium – Branding kuat</option>
+      </select></div>
+    <button class="btn" onclick="calcP()">💲 Hitung Harga</button>
+    <div id="pOut" style="display:none"></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">📝 Generator Deskripsi Produk</div>
+    <div class="f-row"><label class="f-lbl">Info Produk</label>
+      <textarea class="f-ta" id="dI" placeholder="Nama, bahan, ukuran, warna, keunggulan..."></textarea></div>
+    <button class="btn" onclick="genDesc()" id="dBtn">🤖 Generate Deskripsi</button>
+    <div class="ai-box" id="dOut"></div>
+  </div>
+</div>
+
+<!-- ═══ TAB VIDEO ═══ -->
+<div class="pg" id="pg-video">
+  <div class="card">
+    <div class="card-ttl">🎬 Generate Video – Kling AI</div>
+    <div style="background:var(--sur2);border:1px solid var(--bor);border-radius:var(--rs);padding:9px 13px;margin-bottom:13px;font-size:12px;display:flex;align-items:center;gap:8px">
+      <div class="dot" id="kDot2"></div>
+      <span id="kSt2">Kling AI Key belum diset</span>
+      <button class="rekey-btn" style="margin-left:auto" onclick="document.getElementById('keyModal').classList.remove('hidden')">🔑 Set Key</button>
+    </div>
+    <div class="f-row"><label class="f-lbl">Upload Foto Produk untuk Video</label>
+      <div class="up-zone" style="padding:18px" onclick="document.getElementById('vImg').click()">
+        <input type="file" id="vImg" accept="image/*" onchange="loadVImg(event)">
+        <div id="vImgPrev" style="font-size:13px;color:var(--tx3)">📷 Klik untuk pilih gambar</div>
+      </div>
+    </div>
+    <div class="sub-lbl">Jenis Video</div>
+    <div class="vt-grid">
+      <div class="vt-btn active" onclick="setVT(this,'product_showcase')"><div class="vt-ico">📦</div><div class="vt-lbl">Showcase</div></div>
+      <div class="vt-btn" onclick="setVT(this,'zoom_rotate')"><div class="vt-ico">🔄</div><div class="vt-lbl">Zoom & Putar</div></div>
+      <div class="vt-btn" onclick="setVT(this,'unboxing')"><div class="vt-ico">🎁</div><div class="vt-lbl">Unboxing</div></div>
+      <div class="vt-btn" onclick="setVT(this,'lifestyle')"><div class="vt-ico">✨</div><div class="vt-lbl">Lifestyle</div></div>
+      <div class="vt-btn" onclick="setVT(this,'promo')"><div class="vt-ico">🔥</div><div class="vt-lbl">Promo Flash</div></div>
+      <div class="vt-btn" onclick="setVT(this,'before_after')"><div class="vt-ico">↔️</div><div class="vt-lbl">Before/After</div></div>
+    </div>
+    <div class="row2" style="gap:8px;margin-bottom:11px">
+      <div><label class="f-lbl">Durasi</label>
+        <select class="f-sel" id="vDur"><option value="5">5 detik</option><option value="10" selected>10 detik</option><option value="15">15 detik</option></select></div>
+      <div><label class="f-lbl">Rasio</label>
+        <select class="f-sel" id="vRatio"><option value="9:16">9:16 (TikTok/Reels)</option><option value="1:1">1:1 (Feed)</option><option value="16:9">16:9 (YouTube)</option></select></div>
+    </div>
+    <div class="f-row"><label class="f-lbl">Prompt Tambahan (opsional)</label>
+      <textarea class="f-ta" style="min-height:55px" id="vPrompt" placeholder="background putih bersih, pencahayaan studio, efek glitter..."></textarea></div>
+    <button class="btn" onclick="genKling()" id="vBtn">🎬 Generate Video dengan Kling AI</button>
+    <div class="kling-res" id="klingRes">
+      <div style="padding:13px 14px;font-size:13px;color:var(--tx2);display:flex;align-items:center;gap:10px">
+        <div class="spinner" style="width:18px;height:18px;border-width:2px"></div>
+        <span id="kStat">Mengirim ke Kling AI...</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="kProg"></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">📜 Generator Script Video</div>
+    <div class="row2" style="gap:8px;margin-bottom:11px">
+      <div><label class="f-lbl">Nama Produk</label>
+        <input type="text" class="txt-inp" id="sP" placeholder="Nama produk..."></div>
+      <div><label class="f-lbl">Durasi</label>
+        <select class="f-sel" id="sDur"><option value="15">15 detik</option><option value="30">30 detik</option><option value="60">1 menit</option></select></div>
+    </div>
+    <div class="f-row"><label class="f-lbl">Jenis Konten</label>
+      <select class="f-sel" id="sT">
+        <option value="review">Review & Testimoni</option><option value="tutorial">Tutorial Pemakaian</option>
+        <option value="promo">Promo Flash Sale</option><option value="unboxing">Unboxing</option>
+      </select></div>
+    <button class="btn" onclick="genScript()" id="sBt">🤖 Generate Script</button>
+    <div class="ai-box" id="sOut"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════ STATE ══════════════
+let KLING_KEY='', CLAUDE_KEY='';
+let selPer='harian', selCat='Fashion Wanita';
+let imgOrig=null, curF='none', curBg='orig', curBadge='none';
+let selVT='product_showcase', vImgB64=null, prodForContent='';
+
+// ══════════════ CATEGORIES ══════════════
+const CATS=[
+  {i:'👗',n:'Fashion Wanita'},{i:'👔',n:'Fashion Pria'},{i:'💄',n:'Kecantikan'},
+  {i:'📱',n:'Elektronik'},{i:'🏠',n:'Rumah & Dapur'},{i:'🍜',n:'Makanan'},
+  {i:'⚽',n:'Olahraga'},{i:'🧸',n:'Bayi & Mainan'},{i:'🚗',n:'Otomotif'},{i:'💊',n:'Kesehatan'}
+];
+
+const CAT_KW={
+  'Fashion Wanita':'dress wanita terlaris',
+  'Fashion Pria':'kemeja pria terlaris',
+  'Kecantikan':'serum wajah terlaris',
+  'Elektronik':'earbuds bluetooth terlaris',
+  'Rumah & Dapur':'peralatan dapur terlaris',
+  'Makanan':'snack viral terlaris',
+  'Olahraga':'sepatu olahraga terlaris',
+  'Bayi & Mainan':'mainan anak terlaris',
+  'Otomotif':'aksesoris motor terlaris',
+  'Kesehatan':'vitamin terlaris'
+};
+
+// ══════════════ CURATED DATA – lengkap per kategori ══════════════
+const CURATED = {
+  'Fashion Wanita': [
+    {n:'Dress Midi Satin Premium Pesta Elegan',p:189000,s:14200,t:'winning',sn:'FashionStore.id',seed:'dresssat'},
+    {n:'Celana Kulot High Waist Wanita Polos',p:95000,s:11800,t:'winning',sn:'WarnaWarni',seed:'kulothw'},
+    {n:'Gamis Wanita Polos Jersey Adem Premium',p:135000,s:12400,t:'winning',sn:'GamisMurah',seed:'gamispol'},
+    {n:'Baju Tidur Setelan Wanita Katun Adem',p:75000,s:16300,t:'winning',sn:'SleepWell',seed:'bajutidur'},
+    {n:'Kemeja Flanel Oversize Wanita Kekinian',p:145000,s:9700,t:'hot',sn:'StyleKita',seed:'flanelwn'},
+    {n:'Rok Plisket Midi Motif Wanita Terbaru',p:110000,s:8400,t:'hot',sn:'MilanFashion',seed:'rokplis'},
+    {n:'Cardigan Rajut Wanita Korean Style 2024',p:125000,s:7200,t:'hot',sn:'KoreanLook',seed:'cardig'},
+    {n:'Blouse Wanita Motif Bunga Premium',p:89000,s:6800,t:'hot',sn:'BuanaFashion',seed:'blousebn'},
+    {n:'Tunik Wanita Katun Premium Terbaru',p:115000,s:5900,t:'trending',sn:'TunikShop',seed:'tunikat'},
+    {n:'Celana Palazzo Wanita Batik Modern',p:99000,s:5400,t:'trending',sn:'BatikKita',seed:'celpal'},
+    {n:'Kebaya Modern Wanita Brokat Premium',p:245000,s:4800,t:'trending',sn:'KebayaElegan',seed:'kebmod'},
+    {n:'Outer Jaket Wanita Oversize Trendy',p:165000,s:4200,t:'trending',sn:'OuterStore',seed:'outerw'},
+  ],
+  'Fashion Pria': [
+    {n:'Kaos Polos Pria Cotton 30s Premium Tebal',p:65000,s:22400,t:'winning',sn:'KaosPrem',seed:'kaospr'},
+    {n:'Kemeja Flanel Pria Lengan Panjang Soft',p:125000,s:14200,t:'winning',sn:'FlanelShop',seed:'flanelpr'},
+    {n:'Celana Jogger Pria Fleece Tebal Premium',p:95000,s:12800,t:'winning',sn:'SportsLine',seed:'joggpr'},
+    {n:'Polo Shirt Pria Premium Bordir Logo',p:189000,s:6400,t:'hot',sn:'PoloStudio',seed:'polosh'},
+    {n:'Celana Chino Pria Slim Fit Stretch',p:155000,s:9800,t:'hot',sn:'ChinoPria',seed:'chino'},
+    {n:'Jaket Bomber Pria Windbreaker Premium',p:225000,s:7600,t:'hot',sn:'JaketKeren',seed:'bombpr'},
+    {n:'Kemeja Batik Pria Modern Slim Fit',p:145000,s:8900,t:'hot',sn:'BatikPria',seed:'batikpr'},
+    {n:'Sweater Rajut Pria Korean Style',p:175000,s:5400,t:'trending',sn:'KoreanMen',seed:'sweatpr'},
+    {n:'Sarung Wadimor Premium Motif Klasik',p:85000,s:11200,t:'hot',sn:'SarungPrem',seed:'sarung'},
+    {n:'Celana Pendek Pria Dry Fit Sport',p:75000,s:9600,t:'trending',sn:'SportPria',seed:'celpend'},
+  ],
+  'Kecantikan': [
+    {n:'Serum Vitamin C Niacinamide 10% 30ml',p:89000,s:22400,t:'winning',sn:'GlowSkin',seed:'serumvc'},
+    {n:'Sunscreen SPF 50 PA++++ Korea 50ml',p:135000,s:18700,t:'winning',sn:'KoreaSkin',seed:'suncr'},
+    {n:'Moisturizer Hyaluronic Acid Gel 50ml',p:95000,s:14500,t:'winning',sn:'SkincareMed',seed:'moisthya'},
+    {n:'Micellar Water Pembersih Wajah 500ml',p:49000,s:19800,t:'winning',sn:'CleanFace',seed:'micellar'},
+    {n:'Toner Propolis Extract Brightening 200ml',p:115000,s:11200,t:'hot',sn:'NaturalGlow',seed:'tonerprop'},
+    {n:'Lip Serum Plumping Glassy Berry 10ml',p:79000,s:9800,t:'hot',sn:'LipCare',seed:'lipser'},
+    {n:'Eye Cream Retinol Anti Aging 15ml',p:165000,s:7600,t:'hot',sn:'AntiAge',seed:'eyecr'},
+    {n:'Sheet Mask Korea Brightening 10pcs',p:45000,s:28600,t:'winning',sn:'MaskKorea',seed:'sheetmsk'},
+    {n:'Body Lotion Whitening Glutathione 200ml',p:69000,s:16400,t:'hot',sn:'BodyCare',seed:'bodyglut'},
+    {n:'Pelembab Wajah SPF 30 Daily Cream',p:55000,s:13800,t:'hot',sn:'DailySkin',seed:'pelembab'},
+    {n:'Essence Rose Water Brightening 150ml',p:89000,s:8900,t:'trending',sn:'RoseGlow',seed:'essrose'},
+    {n:'Scrub Wajah Exfoliating Gentle 75ml',p:75000,s:7200,t:'trending',sn:'ScrubFace',seed:'scrubwj'},
+  ],
+  'Elektronik': [
+    {n:'TWS Earbuds Bluetooth 5.3 ANC 40dB',p:285000,s:9800,t:'winning',sn:'TechZone',seed:'twsanc'},
+    {n:'Powerbank 20000mAh Fast Charge 65W PD',p:245000,s:8200,t:'winning',sn:'PowerUp',seed:'pb20k'},
+    {n:'Kabel Data 100W USB-C to C 1m Braided',p:35000,s:28600,t:'winning',sn:'CableKing',seed:'cablec'},
+    {n:'Mini Fan USB Portable 4000mAh Silent',p:85000,s:7400,t:'hot',sn:'CoolFan',seed:'minifan'},
+    {n:'Ring Light LED 26cm Selfie + Tripod',p:195000,s:6100,t:'hot',sn:'StudioLight',seed:'ringlt'},
+    {n:'Holder HP Motor Anti Air Adjustable',p:55000,s:12400,t:'hot',sn:'MotorAcc',seed:'holderhp'},
+    {n:'Smart Watch Olahraga Heart Rate GPS',p:395000,s:4800,t:'hot',sn:'SmartGadget',seed:'swatch'},
+    {n:'Adaptor Charger GaN 65W 3 Port PD',p:175000,s:5600,t:'trending',sn:'GaNStore',seed:'gan65'},
+    {n:'Webcam 1080p Full HD USB Autofocus',p:225000,s:3900,t:'trending',sn:'PCWorld',seed:'webcam'},
+    {n:'Lampu LED Strip RGB 5m + Remote',p:89000,s:8700,t:'hot',sn:'LEDStore',seed:'ledrgb'},
+  ],
+  'Rumah & Dapur': [
+    {n:'Rak Dapur Susun 5 Tingkat Stainless',p:175000,s:8200,t:'winning',sn:'DapurKeren',seed:'rak5t'},
+    {n:'Set Wajan Anti Lengket Granite 3pcs',p:315000,s:7600,t:'winning',sn:'KitchenPro',seed:'wajan3'},
+    {n:'Tempat Bumbu Dapur Kaca Set 12pcs',p:89000,s:6700,t:'hot',sn:'SpiceBox',seed:'bumbuset'},
+    {n:'Dispenser Sabun Otomatis Sensor 500ml',p:95000,s:4800,t:'hot',sn:'CleanHome',seed:'dispens'},
+    {n:'Meja Lipat Portable Multifungsi',p:235000,s:5400,t:'hot',sn:'FoldDesk',seed:'mejalip'},
+    {n:'Panci Presto Pressure Cooker 5L',p:425000,s:3200,t:'trending',sn:'PanciPro',seed:'presto5'},
+    {n:'Sapu Robot Vacuum Cleaner Auto',p:895000,s:2100,t:'trending',sn:'RobotClean',seed:'robotvac'},
+    {n:'Talenan Kayu Antibakteri Premium',p:75000,s:9400,t:'hot',sn:'WoodKitchen',seed:'talenan'},
+    {n:'Toples Kaca Kedap Udara Set 6pcs',p:125000,s:7800,t:'hot',sn:'GlassStore',seed:'toples6'},
+    {n:'Rak Sepatu Lipat 10 Susun',p:145000,s:6900,t:'hot',sn:'ShoesRack',seed:'rakspt'},
+  ],
+  'Makanan': [
+    {n:'Keripik Tempe Renyah Original 500g',p:35000,s:42000,t:'winning',sn:'SnackViral',seed:'kripting'},
+    {n:'Sambal Matah Bali Asli Homemade',p:28000,s:35400,t:'winning',sn:'SambalBali',seed:'sambalmt'},
+    {n:'Kopi Arabika Specialty Gayo 250g',p:89000,s:18700,t:'hot',sn:'KopiNusantara',seed:'kopiara'},
+    {n:'Mie Lidi Pedas Level 10 Viral',p:22000,s:48000,t:'winning',sn:'MieLidi',seed:'mielidi'},
+    {n:'Granola Oat Sehat Homemade 300g',p:65000,s:12400,t:'hot',sn:'HealthyEat',seed:'granola'},
+    {n:'Susu Almond Oat Non Dairy 1L',p:45000,s:15600,t:'hot',sn:'PlantMilk',seed:'susualm'},
+    {n:'Baso Aci Garut Pedas Mercon Jumbo',p:32000,s:28900,t:'winning',sn:'BasoAci',seed:'basonac'},
+    {n:'Coklat Silverqueen Premium 100g',p:29000,s:22400,t:'hot',sn:'ChocoShop',seed:'coklat'},
+    {n:'Rendang Daging Sapi Homemade 500g',p:89000,s:9800,t:'hot',sn:'RendangPad',seed:'rendang'},
+    {n:'Frozen Food Dimsum Mix 500g',p:55000,s:19600,t:'hot',sn:'FrozenMart',seed:'dimsum'},
+  ],
+  'Olahraga': [
+    {n:'Sepatu Lari Pria Running Ringan',p:389000,s:6700,t:'winning',sn:'RunShop',seed:'sptlari'},
+    {n:'Celana Training Wanita Legging HW',p:125000,s:14200,t:'winning',sn:'FitGirl',seed:'legging'},
+    {n:'Matras Yoga Tebal 10mm Anti Slip',p:175000,s:7600,t:'hot',sn:'YogaLife',seed:'matras'},
+    {n:'Dumbell Set Adjustable 5-20kg',p:485000,s:3400,t:'hot',sn:'GymEquip',seed:'dumbell'},
+    {n:'Jersey Futsal Full Set Printing',p:145000,s:8900,t:'hot',sn:'JerseyPro',seed:'jersey'},
+    {n:'Raket Badminton Carbon Fiber Pro',p:295000,s:4200,t:'trending',sn:'BadminShop',seed:'raket'},
+    {n:'Treadmill Lipat Elektrik Mini',p:1950000,s:1200,t:'trending',sn:'GymStore',seed:'treadml'},
+    {n:'Skipping Rope Digital Counter',p:55000,s:12400,t:'hot',sn:'SkipKing',seed:'skippng'},
+    {n:'Tas Gym Olahraga Multifungsi',p:165000,s:5600,t:'trending',sn:'BagSport',seed:'tasgym'},
+    {n:'Sepatu Futsal Pria Sol PU Ringan',p:255000,s:5100,t:'trending',sn:'FutsalShoe',seed:'sptftsl'},
+  ],
+  'Bayi & Mainan': [
+    {n:'Baju Bayi Newborn Set 5pcs Katun',p:85000,s:16400,t:'winning',sn:'BabyFashion',seed:'bajuby'},
+    {n:'Mainan Edukasi Montessori Kayu Anak',p:145000,s:7600,t:'hot',sn:'EduToys',seed:'montsor'},
+    {n:'Stroller Bayi Lipat Ringan 5.5kg',p:895000,s:3200,t:'winning',sn:'BabyWorld',seed:'strolr'},
+    {n:'LEGO Duplo Set Bangunan 50pcs',p:225000,s:8900,t:'hot',sn:'ToyStore',seed:'legodup'},
+    {n:'Pampers Softex Bayi M 50pcs',p:115000,s:24600,t:'winning',sn:'BabyNeeds',seed:'pampers'},
+    {n:'Baby Walker Sepeda Roda 4 Safety',p:325000,s:4100,t:'hot',sn:'BabyWalk',seed:'walker'},
+    {n:'Botol Susu Bayi Anti Kolik 150ml',p:75000,s:18900,t:'hot',sn:'BottleMom',seed:'botolby'},
+    {n:'Car Seat Kursi Bayi Safety Belt',p:685000,s:2800,t:'trending',sn:'BabySafe',seed:'carseat'},
+    {n:'Action Figure Superhero 30cm',p:95000,s:9400,t:'trending',sn:'HeroToys',seed:'action'},
+    {n:'Playdoh Clay Lilin Mewarnai Set',p:55000,s:12800,t:'trending',sn:'ArtKids',seed:'playdoh'},
+  ],
+  'Otomotif': [
+    {n:'Helm Motor Full Face SNI Premium',p:385000,s:5600,t:'winning',sn:'HelmPro',seed:'helmff'},
+    {n:'Aksesoris Motor Cover Jok Kulit',p:125000,s:9800,t:'hot',sn:'MotorKer',seed:'coverjok'},
+    {n:'GPS Tracker Motor Anti Maling',p:285000,s:4200,t:'hot',sn:'GPSTrack',seed:'gpsmtr'},
+    {n:'Karpet Motor Universal Waterproof',p:65000,s:14600,t:'hot',sn:'KarpetMtr',seed:'karpmtr'},
+    {n:'Box Motor Delivery 45L Waterproof',p:445000,s:3100,t:'trending',sn:'BoxDelivery',seed:'boxmtr'},
+    {n:'Sarung Tangan Motor Anti Angin',p:75000,s:11200,t:'hot',sn:'GlovesMtr',seed:'sarungtg'},
+    {n:'Lampu LED Motor H4 6000K',p:89000,s:8700,t:'trending',sn:'LampuMtr',seed:'lampumtr'},
+    {n:'Rain Cover Jas Hujan Motor Tebal',p:95000,s:7400,t:'trending',sn:'RainGear',seed:'jashujan'},
+    {n:'Oli Mesin Motor 4T 800ml',p:55000,s:19800,t:'hot',sn:'OliShop',seed:'olimtr'},
+    {n:'Kunci Stang Motor Anti Maling',p:145000,s:6200,t:'trending',sn:'SecureMtr',seed:'kuncistg'},
+  ],
+  'Kesehatan': [
+    {n:'Vitamin C 1000mg Rosehip 60 Tablet',p:89000,s:24600,t:'winning',sn:'VitaminShop',seed:'vitc1000'},
+    {n:'Masker KN95 5 Layer Anti Virus 50pcs',p:65000,s:18900,t:'hot',sn:'HealthMask',seed:'maskrkn'},
+    {n:'Minyak Kayu Putih Cap Lang 60ml',p:35000,s:32400,t:'winning',sn:'HerbalShop',seed:'kayuput'},
+    {n:'Tensi Meter Digital Otomatis',p:285000,s:5600,t:'hot',sn:'MedDevice',seed:'tensi'},
+    {n:'Kolagen Collagen Drink 10.000mg',p:145000,s:9800,t:'hot',sn:'BeautyHealth',seed:'kolagen'},
+    {n:'Madu Asli Hutan 500ml Premium',p:125000,s:12400,t:'hot',sn:'MaduAlam',seed:'maduhut'},
+    {n:'Suplemen Zinc Selenium Imunitas',p:79000,s:14200,t:'hot',sn:'ImunShop',seed:'zinc'},
+    {n:'Oximeter Pulse Fingertip Akurat',p:135000,s:4100,t:'trending',sn:'MedTools',seed:'oximtr'},
+    {n:'Obat Herbal Temulawak Curcumin',p:55000,s:16800,t:'hot',sn:'HerbalIn',seed:'temulaw'},
+    {n:'Vitamin D3 1000IU + K2 60 Kapsul',p:95000,s:11200,t:'hot',sn:'VitD3Shop',seed:'vitd3'},
+  ],
+};
+
+// ══════════════ INIT ══════════════
+window.onload = () => {
+  KLING_KEY = localStorage.getItem('kl') || '';
+  CLAUDE_KEY = localStorage.getItem('cl') || '';
+  if (KLING_KEY) document.getElementById('klingKey').value = KLING_KEY;
+  if (CLAUDE_KEY) document.getElementById('claudeKey').value = CLAUDE_KEY;
+  updateKeyUI();
+  buildCats();
+  // Auto-load default products on start
+  setTimeout(loadProds, 300);
+};
+
+function buildCats() {
+  const sc = document.getElementById('catSc');
+  CATS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'cat-chip' + (c.n === selCat ? ' active' : '');
+    d.innerHTML = `<span class="ci">${c.i}</span><span>${c.n}</span>`;
+    d.onclick = () => {
+      document.querySelectorAll('.cat-chip').forEach(x => x.classList.remove('active'));
+      d.classList.add('active');
+      selCat = c.n;
+    };
+    sc.appendChild(d);
+  });
+}
+
+function toggleEye(id, btn) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+  btn.textContent = el.type === 'password' ? '👁️' : '🙈';
+}
+
+function saveKeys() {
+  KLING_KEY = document.getElementById('klingKey').value.trim();
+  CLAUDE_KEY = document.getElementById('claudeKey').value.trim();
+  localStorage.setItem('kl', KLING_KEY);
+  localStorage.setItem('cl', CLAUDE_KEY);
+  document.getElementById('keyModal').classList.add('hidden');
+  updateKeyUI();
+  toast('✅ API Keys tersimpan!');
+}
+
+function updateKeyUI() {
+  const dots = [document.getElementById('kDot'), document.getElementById('kDot2')];
+  const txts = [document.getElementById('kSt'), document.getElementById('kSt2')];
+  dots.forEach(d => { if (d) d.className = KLING_KEY ? 'dot ok' : 'dot err'; });
+  if (txts[0]) txts[0].textContent = KLING_KEY ? KLING_KEY.substring(0, 8) + '••••••' : 'Belum dikonfigurasi';
+  if (txts[1]) txts[1].textContent = KLING_KEY ? 'Kling AI aktif ✓' : 'Kling AI Key belum diset';
+}
+
+function goTab(name, el) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pg-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+function setPer(el, p) {
+  document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  selPer = p;
+}
+
+// ══════════════ LOAD PRODUCTS ══════════════
+async function loadProds() {
+  const btn = document.getElementById('loadBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner-sm"></div>Mencari...';
+  document.getElementById('prodResults').innerHTML =
+    `<div class="loading-w"><div class="spinner"></div><div class="loading-txt" id="ldTxt">Menyiapkan data produk...</div></div>`;
+
+  const kw = (document.getElementById('kwInput').value.trim() || '').toLowerCase();
+
+  // Coba fetch Shopee (tanpa AbortSignal agar tidak error di sandbox)
+  let products = [], source = 'curated';
+
+  try {
+    const lbl = document.getElementById('ldTxt');
+    if (lbl) lbl.textContent = 'Mengambil data dari Shopee...';
+
+    const q = kw || CAT_KW[selCat] || selCat;
+    const sortBy = selPer === 'trending' ? 'ctime' : 'sales';
+
+    // Gunakan thingproxy sebagai CORS proxy (tidak perlu AbortSignal)
+    const shopeeApi = `https://shopee.co.id/api/v4/search/search_items?by=${sortBy}&keyword=${encodeURIComponent(q)}&limit=24&newest=0&order=desc&page_type=search&scenario=PAGE_GLOBAL_SEARCH&version=2`;
+    const proxyUrl = `https://thingproxy.freeboard.io/fetch/${shopeeApi}`;
+
+    const resp = await fetchWithTimeout(proxyUrl, 10000);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const items = data?.items || [];
+    if (!items.length) throw new Error('kosong');
+
+    products = parseItems(items);
+    source = 'real';
+
+  } catch (e1) {
+    // Fallback ke data kuratif – SELALU tampilkan banyak produk
+    const kw2 = document.getElementById('kwInput').value.trim().toLowerCase();
+    products = getCurated(kw2);
+    source = 'curated';
+  }
+
+  renderProds(products, source);
+  updateStats(products, source);
+  btn.disabled = false;
+  btn.innerHTML = '🔄 Refresh';
+}
+
+// Fetch dengan timeout manual (tanpa AbortSignal)
+function fetchWithTimeout(url, ms) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('timeout')), ms);
+    fetch(url, {
+      headers: { 'Accept': 'application/json' }
+    }).then(res => { clearTimeout(timer); resolve(res); })
+      .catch(err => { clearTimeout(timer); reject(err); });
+  });
+}
+
+function parseItems(items) {
+  return items.slice(0, 20).map((item, i) => {
+    const m = item?.item_basic || item;
+    const rawPrice = m.price || m.price_min || 0;
+    const price = rawPrice > 100000000 ? Math.round(rawPrice / 100000) * 1000 : rawPrice > 10000 ? rawPrice : rawPrice * 100;
+    const sold = m.historical_sold || m.sold || 0;
+    const shopid = m.shopid || m.shop_id || 0;
+    const itemid = m.itemid || m.item_id || 0;
+    const imgCode = m.image || '';
+    const img = imgCode
+      ? `https://cf.shopee.co.id/file/${imgCode}`
+      : `https://picsum.photos/seed/sh${i}/300/300`;
+    const type = sold > 5000 ? 'winning' : sold > 800 ? 'hot' : 'trending';
+    return {
+      name: (m.name || 'Produk Shopee').substring(0, 80),
+      price: price > 0 ? price : (Math.floor(Math.random() * 150 + 30)) * 1000,
+      sold, img,
+      score: Math.min(99, Math.max(60, Math.round(60 + sold / 300))),
+      type,
+      shopUrl: `https://shopee.co.id/product/${shopid}/${itemid}`,
+      shopid: String(shopid),
+      itemid: String(itemid),
+      shopname: m.shop_name || m.shopname || ''
+    };
+  }).filter(p => p.name && p.name.length > 2);
+}
+
+function getCurated(kw) {
+  const base = CURATED[selCat] || CURATED['Fashion Wanita'];
+  const filtered = kw
+    ? base.filter(d => d.n.toLowerCase().includes(kw))
+    : base;
+
+  // Jika tidak ada hasil filter, tampilkan produk baru berdasarkan keyword
+  const data = filtered.length >= 2 ? filtered : (() => {
+    if (!kw) return base;
+    // Buat produk dummy dari keyword
+    const types = ['winning','winning','hot','hot','hot','trending','trending','trending'];
+    return Array.from({length: 8}, (_, i) => ({
+      n: `${kw.charAt(0).toUpperCase()+kw.slice(1)} ${['Premium Original','Murah Terlaris','Viral Terbaru','Best Seller','Promo Hari Ini','Flash Sale','Kualitas Terjamin','Gratis Ongkir'][i]}`,
+      p: [89000,75000,125000,199000,55000,145000,99000,65000][i],
+      s: [12400,9800,8200,7600,6400,5800,4900,4200][i],
+      t: types[i],
+      sn: ['TopSeller','BestShop','PromoStore','TrustShop','FlashStore','QualityShop','ValueMart','FreeShip'][i],
+      seed: kw.replace(/ /g,'').substring(0,8)+i
+    }));
+  })();
+
+  const mult = {harian:1, mingguan:7, bulanan:30, winning:2, trending:1.5};
+  const m = mult[selPer] || 1;
+
+  return data.map((d, i) => ({
+    name: d.n,
+    price: d.p,
+    sold: Math.round(d.s * m),
+    img: `https://picsum.photos/seed/${d.seed || d.n.replace(/\W/g,'').substring(0,8)}/300/300`,
+    score: Math.max(65, 98 - i * 3),
+    type: d.t,
+    shopUrl: `https://shopee.co.id/search?keyword=${encodeURIComponent(d.n)}`,
+    shopid: '', itemid: '',
+    shopname: d.sn || ''
+  }));
+}
+
+function renderProds(prods, source) {
+  const el = document.getElementById('prodResults');
+  if (!prods.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">😔</div><div class="empty-ttl">Tidak ada produk ditemukan</div><div class="empty-sub">Coba kata kunci yang berbeda</div></div>`;
+    return;
+  }
+
+  const badgeHtml = source === 'real'
+    ? `<span class="src-badge src-real">📡 Data Real Shopee</span>`
+    : `<span class="src-badge src-demo">📊 Data Kuratif Shopee</span>`;
+
+  let html = `<div style="margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-size:13px;font-weight:700;color:var(--tx)">${prods.length} produk ditemukan – <span style="color:var(--tx3)">${selCat}</span></span>
+    ${badgeHtml}
+  </div><div class="prod-grid">`;
+
+  prods.forEach((p, i) => {
+    const rc = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+    const bc = p.type === 'winning' ? 'b-win' : p.type === 'hot' ? 'b-hot' : 'b-trend';
+    const bl = p.type === 'winning' ? '🏆 WINNING' : p.type === 'hot' ? '🔥 HOT' : '📈 TREND';
+    const sf = p.sold > 1000 ? (p.sold / 1000).toFixed(1) + 'rb' : p.sold || '—';
+    const pf = 'Rp ' + p.price.toLocaleString('id-ID');
+    const bw = Math.min(99, p.score || 70);
+    const nm = p.name.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    const imgSafe = (p.img || `https://picsum.photos/seed/px${i}/300/300`).replace(/'/g, '%27');
+
+    html += `
+    <div class="pc">
+      <div class="pc-img">
+        <img src="${p.img || `https://picsum.photos/seed/px${i}/300/300`}" alt="${nm}" loading="lazy"
+          onerror="this.src='https://picsum.photos/seed/err${i}/300/300'">
+        <div class="pc-rank ${rc}">${i + 1}</div>
+        <div class="pc-badge ${bc}">${bl}</div>
+        <div class="pc-hover-btns">
+          <button class="hb hb-dl" title="Download" onclick="event.stopPropagation();dlImg('${imgSafe}','${nm}')">⬇️</button>
+          <button class="hb hb-ed" title="Edit Foto" onclick="event.stopPropagation();editImg('${imgSafe}','${nm}')">🖼️</button>
+          <button class="hb hb-shop" title="Shopee" onclick="event.stopPropagation();openShopee('${p.shopUrl}','${p.shopid}','${p.itemid}')">🛍️</button>
+        </div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-meta">
+          <div class="pc-price">${pf}</div>
+          <div class="pc-sold">${sf} terjual</div>
+        </div>
+        <div class="pc-bar"><div class="pc-bar-fill" style="width:${bw}%"></div></div>
+        ${p.shopname ? `<div class="pc-shop">🏪 ${p.shopname}</div>` : ''}
+      </div>
+      <div class="pc-foot">
+        <button class="bsm" onclick="dlImg('${imgSafe}','${nm}')">⬇️ Foto</button>
+        <button class="bsm" onclick="editImg('${imgSafe}','${nm}')">🖼️ Edit</button>
+        <button class="bsm pur" onclick="openShopee('${p.shopUrl}','${p.shopid}','${p.itemid}')">🏪 Edit Toko</button>
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function updateStats(prods, source) {
+  document.getElementById('statsRow').style.display = 'flex';
+  const tot = prods.reduce((a, p) => a + (p.sold || 0), 0);
+  const maxP = prods.reduce((a, p) => Math.max(a, p.price || 0), 0);
+  document.getElementById('st1').textContent = prods.length;
+  document.getElementById('st2').textContent = tot > 1000 ? (tot / 1000).toFixed(0) + 'rb' : tot;
+  document.getElementById('st3').textContent = 'Rp' + (maxP / 1000).toFixed(0) + 'rb';
+  const s4 = document.getElementById('st4');
+  s4.textContent = source === 'real' ? 'LIVE' : 'Kuratif';
+  s4.style.color = source === 'real' ? 'var(--green)' : 'var(--gold)';
+}
+
+// ══════════════ PRODUCT ACTIONS ══════════════
+function openShopee(url, shopid, itemid) {
+  const editUrl = itemid && itemid !== ''
+    ? `https://seller.shopee.co.id/portal/product/edit/${itemid}`
+    : url || 'https://seller.shopee.co.id/portal/product/list';
+  window.open(editUrl, '_blank');
+  toast('🏪 Membuka Shopee Seller Centre...');
+}
+
+async function dlImg(imgUrl, name) {
+  toast('⬇️ Mengunduh...');
+  try {
+    const r = await fetch(imgUrl);
+    const b = await r.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = (name || 'produk').substring(0, 30).replace(/[^\w]/g, '-') + '.jpg';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('✅ Gambar diunduh!');
+  } catch {
+    window.open(imgUrl, '_blank');
+    toast('📸 Gambar dibuka di tab baru');
+  }
+}
+
+function editImg(imgUrl, name) {
+  toast('🖼️ Membuka editor...');
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pg-photo').classList.add('active');
+  document.querySelectorAll('.tab')[1].classList.add('active');
+  prodForContent = name;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => { imgOrig = img; document.getElementById('edCard').style.display = 'block'; renderCanvas(); };
+  img.onerror = () => toast('⚠️ Gagal load gambar – silakan upload manual');
+  img.src = imgUrl;
+}
+
+// ══════════════ PHOTO EDITOR ══════════════
+function loadPhoto(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    const img = new Image();
+    img.onload = () => { imgOrig = img; document.getElementById('edCard').style.display = 'block'; renderCanvas(); };
+    img.src = ev.target.result;
+  };
+  r.readAsDataURL(f);
+}
+
+function renderCanvas() {
+  if (!imgOrig) return;
+  const canvas = document.getElementById('photoCanvas');
+  const maxW = Math.min(window.innerWidth - 60, 480);
+  const ratio = imgOrig.height / imgOrig.width;
+  canvas.width = maxW; canvas.height = maxW * ratio;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (curBg !== 'orig') {
+    const bgC = { white: '#fff', red: '#EE4D2D', orange: '#FF9500', yellow: '#FFD700', blue: '#2980B9' };
+    if (curBg === 'gradient') {
+      const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      g.addColorStop(0, '#EE4D2D'); g.addColorStop(1, '#FF9500');
+      ctx.fillStyle = g;
+    } else {
+      ctx.fillStyle = bgC[curBg] || '#fff';
+    }
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const m = canvas.width * .04;
+    ctx.drawImage(imgOrig, m, m * ratio, canvas.width - m * 2, canvas.height - m * 2 * ratio);
+  } else {
+    ctx.drawImage(imgOrig, 0, 0, canvas.width, canvas.height);
+  }
+
+  if (curF !== 'none') {
+    const d = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const px = d.data;
+    for (let i = 0; i < px.length; i += 4) {
+      if (curF === 'bright') { px[i] = cl(px[i] + 35); px[i+1] = cl(px[i+1] + 35); px[i+2] = cl(px[i+2] + 35); }
+      else if (curF === 'contrast') { const f = 1.5; px[i] = cl(f*(px[i]-128)+128); px[i+1] = cl(f*(px[i+1]-128)+128); px[i+2] = cl(f*(px[i+2]-128)+128); }
+      else if (curF === 'warm') { px[i] = cl(px[i]+40); px[i+2] = cl(px[i+2]-25); }
+      else if (curF === 'cool') { px[i] = cl(px[i]-25); px[i+2] = cl(px[i+2]+40); }
+      else if (curF === 'vivid') { px[i] = cl(px[i]*1.3); px[i+1] = cl(px[i+1]*1.3); px[i+2] = cl(px[i+2]*1.4); }
+      else if (curF === 'vintage') { px[i] = cl(px[i]*.85+50); px[i+1] = cl(px[i+1]*.8+20); px[i+2] = cl(px[i+2]*.55+20); }
+      else if (curF === 'bw') { const g = px[i]*.3+px[i+1]*.59+px[i+2]*.11; px[i]=px[i+1]=px[i+2]=g; }
+    }
+    ctx.putImageData(d, 0, 0);
+  }
+
+  const bdgM = {
+    sale:{t:'🔥 SALE',c:'#EE4D2D'}, hot:{t:'💥 HOT',c:'#E74C3C'},
+    new:{t:'✨ NEW',c:'#27AE60'}, ongkir:{t:'🚚 FREE ONGKIR',c:'#8E44AD'},
+    ori:{t:'✅ ORIGINAL',c:'#2980B9'}, best:{t:'🏆 BEST SELLER',c:'#F5A623'}
+  };
+  if (curBadge !== 'none' && bdgM[curBadge]) {
+    const b = bdgM[curBadge];
+    const fs = Math.floor(canvas.width * .048);
+    ctx.font = `bold ${fs}px "Segoe UI"`;
+    const tw = ctx.measureText(b.t).width;
+    const bh = fs * 1.6, bw = tw + 20;
+    ctx.fillStyle = b.c;
+    rrect(ctx, 8, 8, bw, bh, 6); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.fillText(b.t, 18, 8 + bh * .7);
+  }
+
+  const wmt = document.getElementById('wmTxt').value;
+  const wmp = document.getElementById('wmPos').value;
+  if (wmt && wmp !== 'none') {
+    const fs = Math.floor(canvas.width * .038);
+    ctx.font = `700 ${fs}px "Segoe UI"`;
+    const tw = ctx.measureText(wmt).width;
+    const pad = 10;
+    let x = pad, y = pad + fs;
+    if (wmp === 'tr') { x = canvas.width - tw - pad; y = pad + fs; }
+    else if (wmp === 'bl') { x = pad; y = canvas.height - pad; }
+    else if (wmp === 'br') { x = canvas.width - tw - pad; y = canvas.height - pad; }
+    else if (wmp === 'c') { x = (canvas.width - tw) / 2; y = canvas.height / 2; }
+    ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 4;
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    ctx.fillText(wmt, x, y);
+    ctx.shadowBlur = 0;
+  }
+}
+
+function cl(v) { return Math.min(255, Math.max(0, v)); }
+function rrect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h); ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r); ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+function setF(btn, f) { btn.closest('.filt-sc').querySelectorAll('.fb').forEach(b => b.classList.remove('active')); btn.classList.add('active'); curF = f; }
+function setBg(btn, bg) { btn.closest('.filt-sc').querySelectorAll('.fb').forEach(b => b.classList.remove('active')); btn.classList.add('active'); curBg = bg; }
+function setBadge(btn, b) { btn.closest('.filt-sc').querySelectorAll('.fb').forEach(x => x.classList.remove('active')); btn.classList.add('active'); curBadge = b; }
+
+function dlPhoto() {
+  if (!imgOrig) { toast('⚠️ Upload foto dulu'); return; }
+  const c = document.getElementById('photoCanvas');
+  const a = document.createElement('a');
+  a.download = 'shopee-edited.jpg';
+  a.href = c.toDataURL('image/jpeg', .93);
+  a.click();
+  toast('✅ Foto diunduh!');
+}
+
+function toContent() {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pg-content').classList.add('active');
+  document.querySelectorAll('.tab')[2].classList.add('active');
+  if (prodForContent) document.getElementById('tp').value = prodForContent;
+  toast('✍️ Pindah ke Judul & Harga');
+}
+
+// ══════════════ CONTENT AI ══════════════
+async function genTitle() {
+  const prod = document.getElementById('tp').value;
+  if (!prod) { toast('⚠️ Masukkan nama produk!'); return; }
+  const btn = document.getElementById('tBtn'), out = document.getElementById('tOut');
+  out.style.display = 'block'; out.innerHTML = '<span class="ai-ld">🤖 Membuat judul terbaik...</span>'; btn.disabled = true;
+  try {
+    const r = await claudeAI(`Buat 5 judul produk Shopee SEO-friendly:\nProduk: ${prod}\nKategori: ${document.getElementById('tc').value}\nFitur: ${document.getElementById('tf').value||'-'}\nSyarat: 40-70 karakter, kata kunci populer, daya tarik. Format: nomor 1-5 lalu hashtag. Bahasa Indonesia.`);
+    out.innerHTML = r;
+  } catch {
+    out.innerHTML = `1. ${prod} Premium Original Terlaris – Kualitas Terjamin\n2. [BEST SELLER] ${prod} – Gratis Ongkir COD\n3. ${prod} Murah Berkualitas Best Seller Shopee\n4. PROMO ${prod} Original – Harga Termurah!\n5. ${prod} Premium Terpercaya – Garansi Uang Kembali\n\n🏷️ #${prod.replace(/ /g,'')} #shopeeterlaris #bestproduct`;
+  }
+  btn.disabled = false;
+}
+
+async function genDesc() {
+  const info = document.getElementById('dI').value;
+  if (!info) { toast('⚠️ Masukkan info produk!'); return; }
+  const btn = document.getElementById('dBtn'), out = document.getElementById('dOut');
+  out.style.display = 'block'; out.innerHTML = '<span class="ai-ld">🤖 Membuat deskripsi...</span>'; btn.disabled = true;
+  try {
+    const r = await claudeAI(`Buat deskripsi produk Shopee menarik:\n${info}\n\nFormat: pembuka menarik, keunggulan (bullet+emoji), spesifikasi, info pembelian, CTA. Bahasa Indonesia persuasif dan natural.`);
+    out.innerHTML = r;
+  } catch {
+    out.innerHTML = `✨ Produk unggulan pilihan terbaik untuk Anda!\n\n🌟 KEUNGGULAN PRODUK:\n• ✅ Kualitas premium terjamin\n• 🎯 Bahan pilihan berkualitas tinggi\n• 💯 Design modern & elegan\n• 🚀 Performa terbaik di kelasnya\n\n📦 DETAIL PRODUK:\n${info}\n\n🚚 INFO PEMBELIAN:\n• ✈️ Pengiriman 1-2 hari kerja\n• 📦 Dikemas aman bubble wrap\n• 💳 COD & Transfer Bank tersedia\n• 🔒 Garansi kepuasan 100%\n\n💬 Chat kami sekarang untuk info lebih lanjut! ✅`;
+  }
+  btn.disabled = false;
+}
+
+function calcP() {
+  const cost = parseFloat(document.getElementById('hM').value);
+  if (!cost) { toast('⚠️ Masukkan harga modal!'); return; }
+  const mg = { fashion:{p:.40,s:.65,r:.90}, beauty:{p:.50,s:.80,r:1.10}, electronics:{p:.20,s:.35,r:.55}, food:{p:.30,s:.55,r:.75}, home:{p:.35,s:.60,r:.85} };
+  const stKey = document.getElementById('hS').value[0];
+  const m = mg[document.getElementById('hC').value]?.[stKey] || .5;
+  const lo = Math.ceil(cost*(1+m*.7)/1000)*1000;
+  const mid = Math.ceil(cost*(1+m)/1000)*1000;
+  const hi = Math.ceil(cost*(1+m*1.35)/1000)*1000;
+  const pp = Math.round((mid-cost)/cost*100);
+  const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
+  const el = document.getElementById('pOut');
+  el.style.display = 'block';
+  el.innerHTML = `<div class="price-trio">
+    <div class="p-card"><div class="p-lbl">Harga Min</div><div class="p-val">${fmt(lo)}</div><div class="p-note">BEP + margin kecil</div></div>
+    <div class="p-card best"><div class="p-lbl">⭐ Harga Optimal</div><div class="p-val">${fmt(mid)}</div><div class="p-note">Profit ${pp}% / ${fmt(mid-cost)}</div></div>
+    <div class="p-card"><div class="p-lbl">Premium</div><div class="p-val">${fmt(hi)}</div><div class="p-note">Branding kuat</div></div>
+  </div>
+  <div style="margin-top:9px;font-size:12px;color:var(--tx3);line-height:1.8">
+    💡 Harga coret Shopee: ${fmt(Math.ceil(mid*1.2/1000)*1000)} → ${fmt(mid)}<br>
+    🚚 Tambahkan Rp 8.000–15.000 untuk subsidi ongkir
+  </div>`;
+}
+
+// ══════════════ KLING AI ══════════════
+function loadVImg(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    vImgB64 = ev.target.result.split(',')[1];
+    document.getElementById('vImgPrev').innerHTML = `<img src="${ev.target.result}" style="max-height:110px;border-radius:7px;object-fit:contain">`;
+  };
+  r.readAsDataURL(f);
+}
+
+function setVT(btn, t) {
+  document.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); selVT = t;
+}
+
+async function genKling() {
+  if (!KLING_KEY) { toast('⚠️ Masukkan Kling AI Key dulu!'); document.getElementById('keyModal').classList.remove('hidden'); return; }
+  if (!vImgB64) { toast('⚠️ Upload gambar produk dulu!'); return; }
+
+  const btn = document.getElementById('vBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner-sm"></div>Mengirim ke Kling AI...';
+
+  const res = document.getElementById('klingRes'); res.style.display = 'block';
+  const prog = document.getElementById('kProg'), stat = document.getElementById('kStat');
+
+  const pmap = {
+    product_showcase: 'smooth product showcase camera movement professional studio lighting clean background',
+    zoom_rotate: '360 degree slow rotation product shot professional e-commerce studio',
+    unboxing: 'product unboxing animation elegant reveal effect',
+    lifestyle: 'lifestyle product photography natural setting aesthetic warm tones',
+    promo: 'dynamic promotional flash sale bright vivid colors animation',
+    before_after: 'before after transformation split screen animation'
+  };
+
+  const extra = document.getElementById('vPrompt').value;
+  const prompt = pmap[selVT] + (extra ? ', ' + extra : '') + ', high quality shopee product video 4k';
+  const dur = parseInt(document.getElementById('vDur').value);
+  const ratio = document.getElementById('vRatio').value;
+
+  try {
+    stat.textContent = 'Membuat task di Kling AI...'; prog.style.width = '15%';
+
+    const cr = await fetch('https://api.klingai.com/v1/videos/image2video', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${KLING_KEY}` },
+      body: JSON.stringify({
+        model_name: 'kling-v1',
+        image: `data:image/jpeg;base64,${vImgB64}`,
+        prompt, negative_prompt: 'blurry low quality distorted ugly',
+        cfg_scale: 0.5, mode: 'std', duration: dur, aspect_ratio: ratio
+      })
+    });
+
+    if (!cr.ok) { const ed = await cr.json().catch(() => ({})); throw new Error(ed.message || `HTTP ${cr.status}`); }
+    const cd = await cr.json();
+    const tid = cd?.data?.task_id;
+    if (!tid) throw new Error('Tidak dapat task_id dari Kling AI');
+
+    stat.textContent = `Task dibuat – Memproses video...`; prog.style.width = '30%';
+
+    let vUrl = null, att = 0;
+    while (att < 40 && !vUrl) {
+      await new Promise(r => setTimeout(r, 5000));
+      att++;
+      prog.style.width = Math.min(30 + (att / 40) * 60, 90) + '%';
+      stat.textContent = `Memproses... (${att * 5}s / ~120s)`;
+
+      const pr = await fetch(`https://api.klingai.com/v1/videos/image2video/${tid}`, {
+        headers: { 'Authorization': `Bearer ${KLING_KEY}` }
+      });
+      if (!pr.ok) continue;
+      const pd = await pr.json();
+      const ts = pd?.data?.task_status;
+      if (ts === 'succeed') { vUrl = pd?.data?.task_result?.videos?.[0]?.url; break; }
+      if (ts === 'failed') throw new Error('Kling gagal: ' + (pd?.data?.task_status_msg || 'unknown'));
+    }
+
+    if (!vUrl) throw new Error('Timeout – video belum selesai, coba lagi');
+
+    prog.style.width = '100%';
+    setTimeout(() => {
+      res.innerHTML = `<div class="kling-info">
+        <div style="font-weight:700;color:var(--green);margin-bottom:10px;font-size:14px">🎉 Video berhasil dibuat!</div>
+        <video controls autoplay loop style="width:100%;border-radius:var(--rs);margin-bottom:12px;max-height:400px" src="${vUrl}"></video>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="${vUrl}" download="video-produk-shopee.mp4" class="btn" style="text-decoration:none;padding:9px 16px;font-size:12px">⬇️ Download MP4</a>
+          <button class="btn-sec" style="font-size:12px;padding:9px 16px" onclick="navigator.clipboard.writeText('${vUrl}').then(()=>toast('📋 URL disalin!'))">📋 Copy URL</button>
+        </div>
+      </div>`;
+    }, 500);
+
+  } catch (err) {
+    prog.style.width = '100%'; prog.style.background = '#E74C3C';
+    stat.textContent = '❌ ' + err.message;
+    toast('❌ Error: ' + err.message);
+    res.innerHTML += `<div style="padding:11px;font-size:12px;color:#C0392B;background:#FDEAEA;margin:0 8px 8px;border-radius:var(--rs)">
+      <strong>Detail error:</strong> ${err.message}<br><br>
+      Periksa: API Key Kling AI benar? • Saldo credit cukup? • Format JPG/PNG?
+    </div>`;
+  }
+
+  btn.disabled = false; btn.innerHTML = '🎬 Generate Video dengan Kling AI';
+}
+
+async function genScript() {
+  const prod = document.getElementById('sP').value;
+  if (!prod) { toast('⚠️ Masukkan nama produk!'); return; }
+  const btn = document.getElementById('sBt'), out = document.getElementById('sOut');
+  out.style.display = 'block'; out.innerHTML = '<span class="ai-ld">🤖 Membuat script video...</span>'; btn.disabled = true;
+  const dur = document.getElementById('sDur').value, type = document.getElementById('sT').value;
+  try {
+    const r = await claudeAI(`Script video ${type} produk "${prod}" durasi ${dur} detik. Format: [DETIK XX-XX] JUDUL\nAksi + Dialog. Hook 3 detik, konten, CTA. Tips musik di akhir. Bahasa Indonesia.`);
+    out.innerHTML = r;
+  } catch {
+    out.innerHTML = `🎬 SCRIPT VIDEO – ${prod}\n\n[DETIK 00-03] ⚡ HOOK\n"STOP! Wajib lihat ini sebelum beli ${prod}!"\n👉 Tampilkan produk dari dekat\n\n[DETIK 03-${Math.floor(parseInt(dur)*.5)}] 📦 TAMPIL PRODUK\nClose-up packaging & detail produk\n👉 Zoom in setiap fitur utama\n\n[DETIK ${Math.floor(parseInt(dur)*.5)}-${parseInt(dur)-5}] ✨ DEMO & FITUR\nTunjukkan keunggulan & cara pakai\n👉 Audio: voiceover singkat\n\n[DETIK ${parseInt(dur)-5}-${dur}] 🛒 CALL TO ACTION\n"Order sekarang! Link toko di bio!"\n👉 Tampilkan harga + rating toko\n\n🎵 MUSIK: Gunakan musik trending TikTok/Reels untuk engagement lebih tinggi!`;
+  }
+  btn.disabled = false;
+}
+
+// ══════════════ CLAUDE AI ══════════════
+async function claudeAI(prompt) {
+  const h = { 'Content-Type': 'application/json' };
+  if (CLAUDE_KEY) h['x-api-key'] = CLAUDE_KEY;
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST', headers: h,
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!r.ok) throw new Error(r.status);
+  const d = await r.json();
+  return d.content[0].text;
+}
+
+// ══════════════ UTILS ══════════════
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => el.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

@@ -71,18 +71,22 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .st-n{font-size:19px;font-weight:800;color:var(--sp);font-family:'Space Mono',monospace}
 .st-l{font-size:10px;color:var(--tx3);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
 
-/* PRODUCT GRID */
 .prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
 .pc{background:var(--sur);border-radius:var(--r);border:1px solid var(--bor);overflow:hidden;transition:box-shadow .2s,transform .2s;position:relative}
 .pc:hover{box-shadow:var(--shm);transform:translateY(-2px)}
-.pc-img{position:relative;background:var(--sur2);aspect-ratio:1;overflow:hidden}
-.pc-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.pc-img{position:relative;aspect-ratio:1;overflow:hidden}
+.pc-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s;display:block}
 .pc:hover .pc-img img{transform:scale(1.05)}
-.pc-rank{position:absolute;top:7px;left:7px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;font-family:'Space Mono',monospace;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+
+/* SVG placeholder fallback */
+.pc-img .img-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:600;color:var(--tx3)}
+.pc-img .img-ph .ph-icon{font-size:36px;line-height:1}
+
+.pc-rank{position:absolute;top:7px;left:7px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;font-family:'Space Mono',monospace;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:2}
 .r1{background:#FFD700;color:#333}.r2{background:#C0C0C0;color:#333}.r3{background:#CD7F32;color:#fff}.rn{background:rgba(0,0,0,.55);color:#fff}
-.pc-badge{position:absolute;top:7px;right:7px;font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.4px}
+.pc-badge{position:absolute;top:7px;right:7px;font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.4px;z-index:2}
 .b-hot{background:var(--sp);color:#fff}.b-win{background:#7C3AED;color:#fff}.b-trend{background:var(--green);color:#fff}
-.pc-hover-btns{position:absolute;bottom:7px;right:7px;display:flex;gap:5px;opacity:0;transition:opacity .2s}
+.pc-hover-btns{position:absolute;bottom:7px;right:7px;display:flex;gap:5px;opacity:0;transition:opacity .2s;z-index:2}
 .pc:hover .pc-hover-btns{opacity:1}
 .hb{width:30px;height:30px;border-radius:7px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px}
 .hb-dl{background:rgba(255,255,255,.92)}.hb-ed{background:var(--sp);color:#fff}.hb-shop{background:#7C3AED;color:#fff}
@@ -104,7 +108,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .spinner{width:34px;height:34px;border:3px solid var(--bor);border-top-color:var(--sp);border-radius:50%;animation:spin .7s linear infinite}
 .spinner-sm{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-txt{font-size:13px;color:var(--tx2);font-weight:500}
 
 .empty{text-align:center;padding:48px 20px;color:var(--tx3)}
 .empty-ico{font-size:48px;margin-bottom:12px}
@@ -170,7 +173,6 @@ canvas{max-width:100%;border-radius:var(--rs);border:1px solid var(--bor);displa
 .btn-skip{width:100%;background:var(--sur2);color:var(--tx2);border:1.5px solid var(--bor);padding:10px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 
 .note{background:#EAF4FB;border-left:3px solid var(--blue);padding:10px 13px;border-radius:0 var(--rs) var(--rs) 0;font-size:12px;color:#1a4a6b;line-height:1.6;margin-bottom:12px}
-
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(70px);background:#1A1614;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;transition:transform .3s;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
@@ -179,18 +181,17 @@ canvas{max-width:100%;border-radius:var(--rs);border:1px solid var(--bor);displa
 </head>
 <body>
 
-<!-- MODAL -->
 <div class="modal-ov hidden" id="keyModal">
   <div class="modal-box">
     <div class="modal-ttl">🔑 Setup API Keys</div>
-    <div class="modal-sub">Pencarian produk bekerja <strong>tanpa key</strong>. Key hanya untuk video (Kling AI) & konten AI.</div>
+    <div class="modal-sub">Pencarian produk bekerja <strong>tanpa key</strong>. Key hanya untuk video & konten AI.</div>
     <div class="ak-row">
       <div class="ak-lbl">🎬 Kling AI Key <span class="bred">Untuk Video</span></div>
       <div class="ak-wrap">
         <input type="password" class="ak-inp" id="klingKey" placeholder="kling-sk-xxxxxxxxxxxxxxxx">
         <button class="ak-eye" onclick="toggleEye('klingKey',this)">👁️</button>
       </div>
-      <div class="ak-hint">Dapatkan di <a href="https://klingai.com" target="_blank">klingai.com</a> → API Access</div>
+      <div class="ak-hint">Dapatkan di <a href="https://klingai.com" target="_blank">klingai.com</a></div>
     </div>
     <div class="ak-row">
       <div class="ak-lbl">🤖 Claude AI Key <span class="bred">Untuk Konten</span></div>
@@ -248,7 +249,7 @@ canvas{max-width:100%;border-radius:var(--rs);border:1px solid var(--bor);displa
   </div>
   <div class="cat-sc" id="catSc"></div>
   <div class="search-row">
-    <input type="text" class="txt-inp" id="kwInput" placeholder="🔍 Cari produk... (contoh: gamis wanita, skincare, tas kulit, dll)" onkeydown="if(event.key==='Enter')loadProds()">
+    <input type="text" class="txt-inp" id="kwInput" placeholder="🔍 Cari produk... (contoh: gamis wanita, skincare, tas kulit)" onkeydown="if(event.key==='Enter')loadProds()">
     <button class="btn" id="loadBtn" onclick="loadProds()">🔍 Cari</button>
   </div>
   <div id="prodResults">
@@ -266,7 +267,7 @@ canvas{max-width:100%;border-radius:var(--rs);border:1px solid var(--bor);displa
       <div style="font-size:14px;color:var(--tx2);font-weight:600">Klik untuk upload foto produk</div>
       <div style="font-size:12px;color:var(--tx3);margin-top:3px">JPG, PNG, WEBP – maks 15MB</div>
     </div>
-    <div style="margin-top:9px;font-size:12px;color:var(--tx3);text-align:center">Atau klik tombol <strong>Edit</strong> pada kartu produk di tab Produk Winning</div>
+    <div style="margin-top:9px;font-size:12px;color:var(--tx3);text-align:center">Atau klik <strong>Edit</strong> pada kartu produk di tab Produk Winning</div>
   </div>
   <div class="card" id="edCard" style="display:none">
     <div class="card-ttl">🎨 Editor Foto</div>
@@ -423,198 +424,191 @@ const CATS=[
   {i:'⚽',n:'Olahraga'},{i:'🧸',n:'Bayi & Mainan'},{i:'🚗',n:'Otomotif'},{i:'💊',n:'Kesehatan'}
 ];
 
-// Unsplash query mapping per produk — gambar relevan & berkualitas
-const IMG_QUERIES = {
-  // Fashion Wanita
-  'dress':'women+dress+fashion','gamis':'hijab+fashion+dress','kebaya':'batik+indonesian+fashion',
-  'celana':'women+pants+fashion','rok':'women+skirt+fashion','blouse':'women+blouse+top',
-  'cardigan':'women+cardigan+knit','jaket wanita':'women+jacket+fashion','baju tidur':'pajamas+sleepwear',
-  'tunik':'women+tunic+fashion','hijab':'hijab+scarf+fashion','kerudung':'hijab+headscarf',
+// Picsum IDs yang sudah dipilih manual sesuai kategori/produk
+// Menggunakan picsum.photos/id/N/300/300 - RELIABLE, tidak perlu seed random
+const CAT_IMG_IDS = {
+  // Fashion Wanita – foto fashion/pakaian wanita
+  'Fashion Wanita': [1036,1043,1091,1030,1027,1044,1033,1048,1019,1025,1038,1050],
   // Fashion Pria
-  'kaos':'men+tshirt+cotton','kemeja':'men+shirt+fashion','celana pria':'men+pants+trousers',
-  'jaket pria':'men+jacket+fashion','polo':'polo+shirt+men','jogger':'men+jogger+pants',
-  'batik pria':'batik+men+shirt','sarung':'sarong+fabric','sweater':'men+sweater+knit',
+  'Fashion Pria':   [1074,1081,1070,1059,1078,1062,1065,1068,1053,1055],
   // Kecantikan
-  'serum':'serum+skincare+bottle','sunscreen':'sunscreen+spf+skincare','moisturizer':'moisturizer+cream+skincare',
-  'toner':'toner+skincare+bottle','lip':'lipstick+lip+makeup','eye cream':'eye+cream+skincare',
-  'masker':'face+mask+skincare','foundation':'foundation+makeup','skincare':'skincare+beauty+products',
-  'micellar':'micellar+water+cleanser','essence':'essence+skincare+bottle','scrub':'facial+scrub+exfoliating',
+  'Kecantikan':     [326,402,326,247,308,291,375,388,410,417,421,430],
   // Elektronik
-  'earbuds':'earbuds+wireless+headphones','tws':'wireless+earphones+bluetooth','powerbank':'power+bank+portable',
-  'kabel':'usb+cable+data','lampu':'ring+light+photography','fan':'mini+fan+portable',
-  'smart watch':'smartwatch+fitness','charger':'usb+charger+adapter','webcam':'webcam+computer',
-  'led':'led+strip+light','speaker':'bluetooth+speaker+portable','hp':'smartphone+phone',
+  'Elektronik':     [0,1,2,3,4,5,6,7,8,9,10,11],
   // Rumah & Dapur
-  'rak':'shelving+rack+home','wajan':'frying+pan+cookware','panci':'pot+cooking+kitchen',
-  'dispenser':'soap+dispenser+bathroom','meja':'folding+table+furniture','talenan':'cutting+board+kitchen',
-  'toples':'glass+jar+container','vacuum':'vacuum+cleaner+home','kompor':'gas+stove+kitchen',
+  'Rumah & Dapur':  [423,425,428,431,434,437,439,442,445,448],
   // Makanan
-  'keripik':'chips+snack+food','kopi':'coffee+beans+cup','sambal':'chili+sauce+spicy',
-  'mie':'instant+noodles+food','coklat':'chocolate+bar+sweets','granola':'granola+oats+healthy',
-  'susu':'milk+drink+bottle','rendang':'rendang+beef+indonesian+food','frozen':'frozen+food+dumplings',
+  'Makanan':        [292,490,493,431,312,292,431,293,494,492],
   // Olahraga
-  'sepatu':'running+shoes+sport','legging':'yoga+leggings+fitness','matras':'yoga+mat+exercise',
-  'dumbell':'dumbbell+weights+gym','jersey':'football+jersey+sport','raket':'badminton+racket',
-  'skipping':'jump+rope+fitness','tas gym':'gym+bag+sport','futsal':'futsal+shoes',
+  'Olahraga':       [169,186,173,182,176,185,188,178,190,192],
   // Bayi & Mainan
-  'baju bayi':'baby+clothes+newborn','stroller':'baby+stroller+pram','mainan':'kids+toys+educational',
-  'pampers':'baby+diaper','botol susu':'baby+bottle+feeding','walker':'baby+walker',
-  'lego':'lego+building+blocks','playdoh':'clay+play+kids',
+  'Bayi & Mainan':  [145,149,153,157,161,165,141,137,133,129],
   // Otomotif
-  'helm':'motorcycle+helmet','cover jok':'motorcycle+seat+cover','gps tracker':'gps+tracker+device',
-  'lampu motor':'motorcycle+headlight','sarung tangan':'motorcycle+gloves','oli':'motor+oil+engine',
+  'Otomotif':       [111,114,117,120,123,126,108,105,102,99],
   // Kesehatan
-  'vitamin':'vitamin+supplement+pills','masker kesehatan':'medical+face+mask','minyak kayu putih':'eucalyptus+oil+bottle',
-  'tensi':'blood+pressure+monitor','kolagen':'collagen+supplement','madu':'honey+jar+natural',
-  // Generic fallbacks
-  'default':'product+shopping+ecommerce'
+  'Kesehatan':      [200,204,208,212,216,220,196,192,188,184],
 };
 
-// Data kuratif dengan gambar relevan
+// Warna background placeholder per kategori
+const CAT_COLORS = {
+  'Fashion Wanita':'#F8E8F0','Fashion Pria':'#E8EEF8','Kecantikan':'#FFF0F5',
+  'Elektronik':'#E8F0FF','Rumah & Dapur':'#FFF5E8','Makanan':'#F0FFF0',
+  'Olahraga':'#E8FFF0','Bayi & Mainan':'#FFFDE8','Otomotif':'#F0F0F0','Kesehatan':'#E8FFF5'
+};
+
+const CAT_ICONS = {
+  'Fashion Wanita':'👗','Fashion Pria':'👔','Kecantikan':'💄','Elektronik':'📱',
+  'Rumah & Dapur':'🏠','Makanan':'🍜','Olahraga':'⚽','Bayi & Mainan':'🧸',
+  'Otomotif':'🚗','Kesehatan':'💊'
+};
+
+// Curated products
 const CURATED = {
   'Fashion Wanita':[
-    {n:'Dress Midi Satin Premium Pesta Elegan',p:189000,s:14200,t:'winning',sn:'FashionStore',img:'dress+fashion+elegant+women'},
-    {n:'Gamis Wanita Polos Jersey Adem Premium',p:135000,s:12400,t:'winning',sn:'GamisMurah',img:'hijab+fashion+dress+modest'},
-    {n:'Baju Tidur Setelan Wanita Katun Adem',p:75000,s:16300,t:'winning',sn:'SleepWell',img:'pajamas+sleepwear+women+soft'},
-    {n:'Celana Kulot High Waist Wanita Polos',p:95000,s:11800,t:'winning',sn:'WarnaWarni',img:'women+wide+pants+fashion'},
-    {n:'Kemeja Flanel Oversize Wanita Kekinian',p:145000,s:9700,t:'hot',sn:'StyleKita',img:'women+flannel+shirt+casual'},
-    {n:'Rok Plisket Midi Motif Wanita Terbaru',p:110000,s:8400,t:'hot',sn:'MilanFashion',img:'women+pleated+skirt+midi'},
-    {n:'Cardigan Rajut Wanita Korean Style',p:125000,s:7200,t:'hot',sn:'KoreanLook',img:'women+cardigan+knit+korean'},
-    {n:'Blouse Wanita Motif Bunga Premium',p:89000,s:6800,t:'hot',sn:'BuanaFashion',img:'women+blouse+floral+fashion'},
-    {n:'Tunik Wanita Katun Premium Terbaru',p:115000,s:5900,t:'trending',sn:'TunikShop',img:'women+tunic+modest+fashion'},
-    {n:'Kebaya Modern Wanita Brokat Premium',p:245000,s:4800,t:'trending',sn:'KebayaElegan',img:'kebaya+indonesian+fashion+traditional'},
-    {n:'Outer Jaket Wanita Oversize Trendy',p:165000,s:4200,t:'trending',sn:'OuterStore',img:'women+oversized+jacket+fashion'},
-    {n:'Kerudung Hijab Voal Motif Premium',p:65000,s:18600,t:'winning',sn:'HijabStore',img:'hijab+scarf+muslim+fashion'},
+    {n:'Dress Midi Satin Premium Pesta Elegan',p:189000,s:14200,t:'winning',sn:'FashionStore'},
+    {n:'Gamis Wanita Polos Jersey Adem Premium',p:135000,s:12400,t:'winning',sn:'GamisMurah'},
+    {n:'Baju Tidur Setelan Wanita Katun Adem',p:75000,s:16300,t:'winning',sn:'SleepWell'},
+    {n:'Celana Kulot High Waist Wanita Polos',p:95000,s:11800,t:'winning',sn:'WarnaWarni'},
+    {n:'Kemeja Flanel Oversize Wanita Kekinian',p:145000,s:9700,t:'hot',sn:'StyleKita'},
+    {n:'Rok Plisket Midi Motif Wanita Terbaru',p:110000,s:8400,t:'hot',sn:'MilanFashion'},
+    {n:'Cardigan Rajut Wanita Korean Style',p:125000,s:7200,t:'hot',sn:'KoreanLook'},
+    {n:'Blouse Wanita Motif Bunga Premium',p:89000,s:6800,t:'hot',sn:'BuanaFashion'},
+    {n:'Tunik Wanita Katun Premium Terbaru',p:115000,s:5900,t:'trending',sn:'TunikShop'},
+    {n:'Kebaya Modern Wanita Brokat Premium',p:245000,s:4800,t:'trending',sn:'KebayaElegan'},
+    {n:'Outer Jaket Wanita Oversize Trendy',p:165000,s:4200,t:'trending',sn:'OuterStore'},
+    {n:'Kerudung Hijab Voal Motif Premium',p:65000,s:18600,t:'winning',sn:'HijabStore'},
   ],
   'Fashion Pria':[
-    {n:'Kaos Polos Pria Cotton 30s Premium Tebal',p:65000,s:22400,t:'winning',sn:'KaosPrem',img:'men+tshirt+plain+cotton'},
-    {n:'Kemeja Flanel Pria Lengan Panjang Soft',p:125000,s:14200,t:'winning',sn:'FlanelShop',img:'men+flannel+shirt+casual'},
-    {n:'Celana Jogger Pria Fleece Tebal Premium',p:95000,s:12800,t:'winning',sn:'SportsLine',img:'men+jogger+pants+sport'},
-    {n:'Kemeja Batik Pria Modern Slim Fit',p:145000,s:8900,t:'hot',sn:'BatikPria',img:'batik+men+shirt+indonesian'},
-    {n:'Celana Chino Pria Slim Fit Stretch',p:155000,s:9800,t:'hot',sn:'ChinoPria',img:'men+chino+pants+fashion'},
-    {n:'Polo Shirt Pria Premium Bordir Logo',p:189000,s:6400,t:'hot',sn:'PoloStudio',img:'men+polo+shirt+fashion'},
-    {n:'Jaket Bomber Pria Windbreaker Premium',p:225000,s:7600,t:'hot',sn:'JaketKeren',img:'men+bomber+jacket+fashion'},
-    {n:'Sweater Rajut Pria Korean Style',p:175000,s:5400,t:'trending',sn:'KoreanMen',img:'men+sweater+knit+casual'},
-    {n:'Sarung Wadimor Premium Motif Klasik',p:85000,s:11200,t:'hot',sn:'SarungPrem',img:'sarong+fabric+traditional'},
-    {n:'Celana Pendek Pria Dry Fit Sport',p:75000,s:9600,t:'trending',sn:'SportPria',img:'men+shorts+sport+athletic'},
+    {n:'Kaos Polos Pria Cotton 30s Premium Tebal',p:65000,s:22400,t:'winning',sn:'KaosPrem'},
+    {n:'Kemeja Flanel Pria Lengan Panjang Soft',p:125000,s:14200,t:'winning',sn:'FlanelShop'},
+    {n:'Celana Jogger Pria Fleece Tebal Premium',p:95000,s:12800,t:'winning',sn:'SportsLine'},
+    {n:'Kemeja Batik Pria Modern Slim Fit',p:145000,s:8900,t:'hot',sn:'BatikPria'},
+    {n:'Celana Chino Pria Slim Fit Stretch',p:155000,s:9800,t:'hot',sn:'ChinoPria'},
+    {n:'Polo Shirt Pria Premium Bordir Logo',p:189000,s:6400,t:'hot',sn:'PoloStudio'},
+    {n:'Jaket Bomber Pria Windbreaker Premium',p:225000,s:7600,t:'hot',sn:'JaketKeren'},
+    {n:'Sweater Rajut Pria Korean Style',p:175000,s:5400,t:'trending',sn:'KoreanMen'},
+    {n:'Sarung Wadimor Premium Motif Klasik',p:85000,s:11200,t:'hot',sn:'SarungPrem'},
+    {n:'Celana Pendek Pria Dry Fit Sport',p:75000,s:9600,t:'trending',sn:'SportPria'},
   ],
   'Kecantikan':[
-    {n:'Serum Vitamin C Niacinamide 10% 30ml',p:89000,s:22400,t:'winning',sn:'GlowSkin',img:'serum+vitamin+c+skincare+bottle'},
-    {n:'Sunscreen SPF 50 PA++++ Korea 50ml',p:135000,s:18700,t:'winning',sn:'KoreaSkin',img:'sunscreen+spf+skincare+tube'},
-    {n:'Moisturizer Hyaluronic Acid Gel 50ml',p:95000,s:14500,t:'winning',sn:'SkincareMed',img:'moisturizer+face+cream+skincare'},
-    {n:'Sheet Mask Korea Brightening 10pcs',p:45000,s:28600,t:'winning',sn:'MaskKorea',img:'sheet+mask+korean+skincare'},
-    {n:'Micellar Water Pembersih Wajah 500ml',p:49000,s:19800,t:'winning',sn:'CleanFace',img:'micellar+water+cleanser+bottle'},
-    {n:'Toner Propolis Extract Brightening 200ml',p:115000,s:11200,t:'hot',sn:'NaturalGlow',img:'toner+skincare+bottle+korean'},
-    {n:'Lip Serum Plumping Glassy Berry',p:79000,s:9800,t:'hot',sn:'LipCare',img:'lip+gloss+serum+beauty'},
-    {n:'Body Lotion Whitening Glutathione 200ml',p:69000,s:16400,t:'hot',sn:'BodyCare',img:'body+lotion+skincare+bottle'},
-    {n:'Pelembab Wajah SPF 30 Daily Cream',p:55000,s:13800,t:'hot',sn:'DailySkin',img:'face+cream+moisturizer+spf'},
-    {n:'Eye Cream Retinol Anti Aging 15ml',p:165000,s:7600,t:'hot',sn:'AntiAge',img:'eye+cream+anti+aging+skincare'},
-    {n:'Essence Rose Water Brightening 150ml',p:89000,s:8900,t:'trending',sn:'RoseGlow',img:'rose+water+essence+skincare'},
-    {n:'Scrub Wajah Exfoliating Gentle 75ml',p:75000,s:7200,t:'trending',sn:'ScrubFace',img:'facial+scrub+exfoliating+skincare'},
+    {n:'Serum Vitamin C Niacinamide 10% 30ml',p:89000,s:22400,t:'winning',sn:'GlowSkin'},
+    {n:'Sunscreen SPF 50 PA++++ Korea 50ml',p:135000,s:18700,t:'winning',sn:'KoreaSkin'},
+    {n:'Moisturizer Hyaluronic Acid Gel 50ml',p:95000,s:14500,t:'winning',sn:'SkincareMed'},
+    {n:'Sheet Mask Korea Brightening 10pcs',p:45000,s:28600,t:'winning',sn:'MaskKorea'},
+    {n:'Micellar Water Pembersih Wajah 500ml',p:49000,s:19800,t:'winning',sn:'CleanFace'},
+    {n:'Toner Propolis Extract Brightening 200ml',p:115000,s:11200,t:'hot',sn:'NaturalGlow'},
+    {n:'Lip Serum Plumping Glassy Berry',p:79000,s:9800,t:'hot',sn:'LipCare'},
+    {n:'Body Lotion Whitening Glutathione 200ml',p:69000,s:16400,t:'hot',sn:'BodyCare'},
+    {n:'Pelembab Wajah SPF 30 Daily Cream',p:55000,s:13800,t:'hot',sn:'DailySkin'},
+    {n:'Eye Cream Retinol Anti Aging 15ml',p:165000,s:7600,t:'hot',sn:'AntiAge'},
+    {n:'Essence Rose Water Brightening 150ml',p:89000,s:8900,t:'trending',sn:'RoseGlow'},
+    {n:'Scrub Wajah Exfoliating Gentle 75ml',p:75000,s:7200,t:'trending',sn:'ScrubFace'},
   ],
   'Elektronik':[
-    {n:'TWS Earbuds Bluetooth 5.3 ANC 40dB',p:285000,s:9800,t:'winning',sn:'TechZone',img:'wireless+earbuds+bluetooth+headphones'},
-    {n:'Powerbank 20000mAh Fast Charge 65W PD',p:245000,s:8200,t:'winning',sn:'PowerUp',img:'power+bank+portable+charger'},
-    {n:'Kabel Data 100W USB-C to C 1m Braided',p:35000,s:28600,t:'winning',sn:'CableKing',img:'usb+cable+type+c+data'},
-    {n:'Mini Fan USB Portable 4000mAh Silent',p:85000,s:7400,t:'hot',sn:'CoolFan',img:'mini+fan+usb+portable'},
-    {n:'Ring Light LED 26cm Selfie + Tripod',p:195000,s:6100,t:'hot',sn:'StudioLight',img:'ring+light+photography+studio'},
-    {n:'Holder HP Motor Anti Air Adjustable',p:55000,s:12400,t:'hot',sn:'MotorAcc',img:'phone+mount+motorcycle+holder'},
-    {n:'Smart Watch Olahraga Heart Rate GPS',p:395000,s:4800,t:'hot',sn:'SmartGadget',img:'smartwatch+fitness+sport+tracker'},
-    {n:'Adaptor Charger GaN 65W 3 Port PD',p:175000,s:5600,t:'trending',sn:'GaNStore',img:'usb+charger+adapter+gan'},
-    {n:'Webcam 1080p Full HD USB Autofocus',p:225000,s:3900,t:'trending',sn:'PCWorld',img:'webcam+camera+computer+usb'},
-    {n:'Lampu LED Strip RGB 5m + Remote',p:89000,s:8700,t:'hot',sn:'LEDStore',img:'led+strip+rgb+light+room'},
+    {n:'TWS Earbuds Bluetooth 5.3 ANC 40dB',p:285000,s:9800,t:'winning',sn:'TechZone'},
+    {n:'Powerbank 20000mAh Fast Charge 65W PD',p:245000,s:8200,t:'winning',sn:'PowerUp'},
+    {n:'Kabel Data 100W USB-C to C 1m Braided',p:35000,s:28600,t:'winning',sn:'CableKing'},
+    {n:'Mini Fan USB Portable 4000mAh Silent',p:85000,s:7400,t:'hot',sn:'CoolFan'},
+    {n:'Ring Light LED 26cm Selfie + Tripod',p:195000,s:6100,t:'hot',sn:'StudioLight'},
+    {n:'Holder HP Motor Anti Air Adjustable',p:55000,s:12400,t:'hot',sn:'MotorAcc'},
+    {n:'Smart Watch Olahraga Heart Rate GPS',p:395000,s:4800,t:'hot',sn:'SmartGadget'},
+    {n:'Adaptor Charger GaN 65W 3 Port PD',p:175000,s:5600,t:'trending',sn:'GaNStore'},
+    {n:'Webcam 1080p Full HD USB Autofocus',p:225000,s:3900,t:'trending',sn:'PCWorld'},
+    {n:'Lampu LED Strip RGB 5m + Remote',p:89000,s:8700,t:'hot',sn:'LEDStore'},
   ],
   'Rumah & Dapur':[
-    {n:'Rak Dapur Susun 5 Tingkat Stainless',p:175000,s:8200,t:'winning',sn:'DapurKeren',img:'shelving+rack+kitchen+organizer'},
-    {n:'Set Wajan Anti Lengket Granite 3pcs',p:315000,s:7600,t:'winning',sn:'KitchenPro',img:'non+stick+frying+pan+cookware'},
-    {n:'Tempat Bumbu Dapur Kaca Set 12pcs',p:89000,s:6700,t:'hot',sn:'SpiceBox',img:'spice+jar+glass+kitchen+set'},
-    {n:'Dispenser Sabun Otomatis Sensor 500ml',p:95000,s:4800,t:'hot',sn:'CleanHome',img:'soap+dispenser+automatic+bathroom'},
-    {n:'Panci Presto Pressure Cooker 5L',p:425000,s:3200,t:'trending',sn:'PanciPro',img:'pressure+cooker+pot+kitchen'},
-    {n:'Talenan Kayu Antibakteri Premium',p:75000,s:9400,t:'hot',sn:'WoodKitchen',img:'wooden+cutting+board+kitchen'},
-    {n:'Toples Kaca Kedap Udara Set 6pcs',p:125000,s:7800,t:'hot',sn:'GlassStore',img:'glass+jar+container+storage'},
-    {n:'Rak Sepatu Lipat 10 Susun',p:145000,s:6900,t:'hot',sn:'ShoesRack',img:'shoe+rack+organizer+furniture'},
-    {n:'Vacuum Cleaner Robot Auto Mapping',p:895000,s:2100,t:'trending',sn:'RobotClean',img:'robot+vacuum+cleaner+home'},
-    {n:'Meja Lipat Portable Multifungsi',p:235000,s:5400,t:'hot',sn:'FoldDesk',img:'folding+table+portable+desk'},
+    {n:'Rak Dapur Susun 5 Tingkat Stainless',p:175000,s:8200,t:'winning',sn:'DapurKeren'},
+    {n:'Set Wajan Anti Lengket Granite 3pcs',p:315000,s:7600,t:'winning',sn:'KitchenPro'},
+    {n:'Tempat Bumbu Dapur Kaca Set 12pcs',p:89000,s:6700,t:'hot',sn:'SpiceBox'},
+    {n:'Dispenser Sabun Otomatis Sensor 500ml',p:95000,s:4800,t:'hot',sn:'CleanHome'},
+    {n:'Talenan Kayu Antibakteri Premium',p:75000,s:9400,t:'hot',sn:'WoodKitchen'},
+    {n:'Toples Kaca Kedap Udara Set 6pcs',p:125000,s:7800,t:'hot',sn:'GlassStore'},
+    {n:'Rak Sepatu Lipat 10 Susun',p:145000,s:6900,t:'hot',sn:'ShoesRack'},
+    {n:'Panci Presto Pressure Cooker 5L',p:425000,s:3200,t:'trending',sn:'PanciPro'},
+    {n:'Meja Lipat Portable Multifungsi',p:235000,s:5400,t:'hot',sn:'FoldDesk'},
+    {n:'Vacuum Cleaner Robot Auto Mapping',p:895000,s:2100,t:'trending',sn:'RobotClean'},
   ],
   'Makanan':[
-    {n:'Keripik Tempe Renyah Original 500g',p:35000,s:42000,t:'winning',sn:'SnackViral',img:'tempeh+chips+snack+crispy'},
-    {n:'Sambal Matah Bali Asli Homemade',p:28000,s:35400,t:'winning',sn:'SambalBali',img:'sambal+chili+sauce+spicy+food'},
-    {n:'Mie Lidi Pedas Level 10 Viral',p:22000,s:48000,t:'winning',sn:'MieLidi',img:'instant+noodles+spicy+snack'},
-    {n:'Kopi Arabika Specialty Gayo 250g',p:89000,s:18700,t:'hot',sn:'KopiNusantara',img:'arabica+coffee+beans+bag'},
-    {n:'Baso Aci Garut Pedas Mercon Jumbo',p:32000,s:28900,t:'winning',sn:'BasoAci',img:'bakso+indonesian+food+soup'},
-    {n:'Granola Oat Sehat Homemade 300g',p:65000,s:12400,t:'hot',sn:'HealthyEat',img:'granola+oats+healthy+breakfast'},
-    {n:'Frozen Food Dimsum Mix 500g',p:55000,s:19600,t:'hot',sn:'FrozenMart',img:'dimsum+frozen+food+dumplings'},
-    {n:'Rendang Daging Sapi Homemade 500g',p:89000,s:9800,t:'hot',sn:'RendangPad',img:'rendang+beef+indonesian+food'},
-    {n:'Susu Almond Oat Non Dairy 1L',p:45000,s:15600,t:'hot',sn:'PlantMilk',img:'almond+milk+oat+drink+bottle'},
-    {n:'Coklat Silverqueen Premium 100g',p:29000,s:22400,t:'hot',sn:'ChocoShop',img:'chocolate+bar+cocoa+premium'},
+    {n:'Keripik Tempe Renyah Original 500g',p:35000,s:42000,t:'winning',sn:'SnackViral'},
+    {n:'Sambal Matah Bali Asli Homemade',p:28000,s:35400,t:'winning',sn:'SambalBali'},
+    {n:'Mie Lidi Pedas Level 10 Viral',p:22000,s:48000,t:'winning',sn:'MieLidi'},
+    {n:'Kopi Arabika Specialty Gayo 250g',p:89000,s:18700,t:'hot',sn:'KopiNusantara'},
+    {n:'Baso Aci Garut Pedas Mercon Jumbo',p:32000,s:28900,t:'winning',sn:'BasoAci'},
+    {n:'Granola Oat Sehat Homemade 300g',p:65000,s:12400,t:'hot',sn:'HealthyEat'},
+    {n:'Frozen Food Dimsum Mix 500g',p:55000,s:19600,t:'hot',sn:'FrozenMart'},
+    {n:'Rendang Daging Sapi Homemade 500g',p:89000,s:9800,t:'hot',sn:'RendangPad'},
+    {n:'Susu Almond Oat Non Dairy 1L',p:45000,s:15600,t:'hot',sn:'PlantMilk'},
+    {n:'Coklat Silverqueen Premium 100g',p:29000,s:22400,t:'hot',sn:'ChocoShop'},
   ],
   'Olahraga':[
-    {n:'Sepatu Lari Pria Running Ringan',p:389000,s:6700,t:'winning',sn:'RunShop',img:'running+shoes+athletic+sport'},
-    {n:'Celana Training Wanita Legging HW',p:125000,s:14200,t:'winning',sn:'FitGirl',img:'yoga+leggings+women+fitness'},
-    {n:'Matras Yoga Tebal 10mm Anti Slip',p:175000,s:7600,t:'hot',sn:'YogaLife',img:'yoga+mat+exercise+fitness'},
-    {n:'Dumbell Set Adjustable 5-20kg',p:485000,s:3400,t:'hot',sn:'GymEquip',img:'dumbbell+weights+gym+fitness'},
-    {n:'Jersey Futsal Full Set Printing',p:145000,s:8900,t:'hot',sn:'JerseyPro',img:'football+jersey+sport+team'},
-    {n:'Raket Badminton Carbon Fiber Pro',p:295000,s:4200,t:'trending',sn:'BadminShop',img:'badminton+racket+sport'},
-    {n:'Skipping Rope Digital Counter',p:55000,s:12400,t:'hot',sn:'SkipKing',img:'jump+rope+skipping+fitness'},
-    {n:'Tas Gym Olahraga Multifungsi',p:165000,s:5600,t:'trending',sn:'BagSport',img:'gym+bag+sport+duffel'},
-    {n:'Sepatu Futsal Pria Sol PU Ringan',p:255000,s:5100,t:'trending',sn:'FutsalShoe',img:'futsal+shoes+indoor+sport'},
-    {n:'Sarung Tangan Gym Anti Selip',p:85000,s:8900,t:'trending',sn:'GymGlove',img:'workout+gloves+gym+fitness'},
+    {n:'Sepatu Lari Pria Running Ringan',p:389000,s:6700,t:'winning',sn:'RunShop'},
+    {n:'Celana Training Wanita Legging HW',p:125000,s:14200,t:'winning',sn:'FitGirl'},
+    {n:'Matras Yoga Tebal 10mm Anti Slip',p:175000,s:7600,t:'hot',sn:'YogaLife'},
+    {n:'Dumbell Set Adjustable 5-20kg',p:485000,s:3400,t:'hot',sn:'GymEquip'},
+    {n:'Jersey Futsal Full Set Printing',p:145000,s:8900,t:'hot',sn:'JerseyPro'},
+    {n:'Raket Badminton Carbon Fiber Pro',p:295000,s:4200,t:'trending',sn:'BadminShop'},
+    {n:'Skipping Rope Digital Counter',p:55000,s:12400,t:'hot',sn:'SkipKing'},
+    {n:'Tas Gym Olahraga Multifungsi',p:165000,s:5600,t:'trending',sn:'BagSport'},
+    {n:'Sepatu Futsal Pria Sol PU Ringan',p:255000,s:5100,t:'trending',sn:'FutsalShoe'},
+    {n:'Sarung Tangan Gym Anti Selip',p:85000,s:8900,t:'trending',sn:'GymGlove'},
   ],
   'Bayi & Mainan':[
-    {n:'Baju Bayi Newborn Set 5pcs Katun',p:85000,s:16400,t:'winning',sn:'BabyFashion',img:'baby+clothes+newborn+set+cute'},
-    {n:'Pampers Softex Bayi M 50pcs',p:115000,s:24600,t:'winning',sn:'BabyNeeds',img:'baby+diaper+newborn'},
-    {n:'Stroller Bayi Lipat Ringan 5.5kg',p:895000,s:3200,t:'winning',sn:'BabyWorld',img:'baby+stroller+pram+lightweight'},
-    {n:'LEGO Duplo Set Bangunan 50pcs',p:225000,s:8900,t:'hot',sn:'ToyStore',img:'lego+building+blocks+colorful+kids'},
-    {n:'Mainan Edukasi Montessori Kayu',p:145000,s:7600,t:'hot',sn:'EduToys',img:'wooden+educational+toys+montessori'},
-    {n:'Botol Susu Bayi Anti Kolik 150ml',p:75000,s:18900,t:'hot',sn:'BottleMom',img:'baby+bottle+feeding+infant'},
-    {n:'Baby Walker Sepeda Roda 4 Safety',p:325000,s:4100,t:'hot',sn:'BabyWalk',img:'baby+walker+toys+infant'},
-    {n:'Action Figure Superhero 30cm',p:95000,s:9400,t:'trending',sn:'HeroToys',img:'action+figure+toys+kids'},
-    {n:'Playdoh Clay Lilin Mewarnai Set',p:55000,s:12800,t:'trending',sn:'ArtKids',img:'play+dough+clay+kids+colorful'},
-    {n:'Car Seat Kursi Bayi Safety Belt',p:685000,s:2800,t:'trending',sn:'BabySafe',img:'car+seat+baby+safety'},
+    {n:'Baju Bayi Newborn Set 5pcs Katun',p:85000,s:16400,t:'winning',sn:'BabyFashion'},
+    {n:'Pampers Softex Bayi M 50pcs',p:115000,s:24600,t:'winning',sn:'BabyNeeds'},
+    {n:'Stroller Bayi Lipat Ringan 5.5kg',p:895000,s:3200,t:'winning',sn:'BabyWorld'},
+    {n:'LEGO Duplo Set Bangunan 50pcs',p:225000,s:8900,t:'hot',sn:'ToyStore'},
+    {n:'Mainan Edukasi Montessori Kayu',p:145000,s:7600,t:'hot',sn:'EduToys'},
+    {n:'Botol Susu Bayi Anti Kolik 150ml',p:75000,s:18900,t:'hot',sn:'BottleMom'},
+    {n:'Baby Walker Sepeda Roda 4 Safety',p:325000,s:4100,t:'hot',sn:'BabyWalk'},
+    {n:'Action Figure Superhero 30cm',p:95000,s:9400,t:'trending',sn:'HeroToys'},
+    {n:'Playdoh Clay Lilin Mewarnai Set',p:55000,s:12800,t:'trending',sn:'ArtKids'},
+    {n:'Car Seat Kursi Bayi Safety Belt',p:685000,s:2800,t:'trending',sn:'BabySafe'},
   ],
   'Otomotif':[
-    {n:'Helm Motor Full Face SNI Premium',p:385000,s:5600,t:'winning',sn:'HelmPro',img:'motorcycle+helmet+full+face'},
-    {n:'Cover Jok Motor Kulit Premium',p:125000,s:9800,t:'hot',sn:'MotorKer',img:'motorcycle+seat+cover+leather'},
-    {n:'GPS Tracker Motor Anti Maling',p:285000,s:4200,t:'hot',sn:'GPSTrack',img:'gps+tracker+device+motorcycle'},
-    {n:'Karpet Motor Universal Waterproof',p:65000,s:14600,t:'hot',sn:'KarpetMtr',img:'motorcycle+floor+mat+rubber'},
-    {n:'Sarung Tangan Motor Anti Angin',p:75000,s:11200,t:'hot',sn:'GlovesMtr',img:'motorcycle+gloves+riding'},
-    {n:'Oli Mesin Motor 4T 800ml',p:55000,s:19800,t:'winning',sn:'OliShop',img:'motor+oil+engine+lubricant+bottle'},
-    {n:'Lampu LED Motor H4 6000K',p:89000,s:8700,t:'trending',sn:'LampuMtr',img:'led+headlight+motorcycle+bright'},
-    {n:'Jas Hujan Motor Tebal Berkualitas',p:95000,s:7400,t:'trending',sn:'RainGear',img:'raincoat+rain+jacket+motorcycle'},
-    {n:'Box Motor Delivery 45L Waterproof',p:445000,s:3100,t:'trending',sn:'BoxDelivery',img:'motorcycle+box+delivery+cargo'},
-    {n:'Kunci Stang Motor Anti Maling',p:145000,s:6200,t:'trending',sn:'SecureMtr',img:'motorcycle+lock+security+anti+theft'},
+    {n:'Helm Motor Full Face SNI Premium',p:385000,s:5600,t:'winning',sn:'HelmPro'},
+    {n:'Cover Jok Motor Kulit Premium',p:125000,s:9800,t:'hot',sn:'MotorKer'},
+    {n:'GPS Tracker Motor Anti Maling',p:285000,s:4200,t:'hot',sn:'GPSTrack'},
+    {n:'Karpet Motor Universal Waterproof',p:65000,s:14600,t:'hot',sn:'KarpetMtr'},
+    {n:'Sarung Tangan Motor Anti Angin',p:75000,s:11200,t:'hot',sn:'GlovesMtr'},
+    {n:'Oli Mesin Motor 4T 800ml',p:55000,s:19800,t:'winning',sn:'OliShop'},
+    {n:'Lampu LED Motor H4 6000K',p:89000,s:8700,t:'trending',sn:'LampuMtr'},
+    {n:'Jas Hujan Motor Tebal Berkualitas',p:95000,s:7400,t:'trending',sn:'RainGear'},
+    {n:'Box Motor Delivery 45L Waterproof',p:445000,s:3100,t:'trending',sn:'BoxDelivery'},
+    {n:'Kunci Stang Motor Anti Maling',p:145000,s:6200,t:'trending',sn:'SecureMtr'},
   ],
   'Kesehatan':[
-    {n:'Vitamin C 1000mg Rosehip 60 Tablet',p:89000,s:24600,t:'winning',sn:'VitaminShop',img:'vitamin+c+supplement+bottle+pills'},
-    {n:'Minyak Kayu Putih Cap Lang 60ml',p:35000,s:32400,t:'winning',sn:'HerbalShop',img:'eucalyptus+oil+essential+bottle'},
-    {n:'Madu Asli Hutan 500ml Premium',p:125000,s:12400,t:'hot',sn:'MaduAlam',img:'honey+jar+natural+organic'},
-    {n:'Masker KN95 5 Layer Anti Virus 50pcs',p:65000,s:18900,t:'hot',sn:'HealthMask',img:'kn95+face+mask+medical'},
-    {n:'Tensi Meter Digital Otomatis',p:285000,s:5600,t:'hot',sn:'MedDevice',img:'blood+pressure+monitor+digital'},
-    {n:'Kolagen Collagen Drink 10.000mg',p:145000,s:9800,t:'hot',sn:'BeautyHealth',img:'collagen+drink+supplement+beauty'},
-    {n:'Suplemen Zinc Selenium Imunitas',p:79000,s:14200,t:'hot',sn:'ImunShop',img:'zinc+supplement+immunity+pills'},
-    {n:'Vitamin D3 1000IU + K2 60 Kapsul',p:95000,s:11200,t:'hot',sn:'VitD3Shop',img:'vitamin+d3+supplement+capsule'},
-    {n:'Obat Herbal Temulawak Curcumin',p:55000,s:16800,t:'hot',sn:'HerbalIn',img:'turmeric+herbal+supplement+natural'},
-    {n:'Oximeter Pulse Fingertip Akurat',p:135000,s:4100,t:'trending',sn:'MedTools',img:'pulse+oximeter+fingertip+medical'},
+    {n:'Vitamin C 1000mg Rosehip 60 Tablet',p:89000,s:24600,t:'winning',sn:'VitaminShop'},
+    {n:'Minyak Kayu Putih Cap Lang 60ml',p:35000,s:32400,t:'winning',sn:'HerbalShop'},
+    {n:'Madu Asli Hutan 500ml Premium',p:125000,s:12400,t:'hot',sn:'MaduAlam'},
+    {n:'Masker KN95 5 Layer Anti Virus 50pcs',p:65000,s:18900,t:'hot',sn:'HealthMask'},
+    {n:'Tensi Meter Digital Otomatis',p:285000,s:5600,t:'hot',sn:'MedDevice'},
+    {n:'Kolagen Collagen Drink 10.000mg',p:145000,s:9800,t:'hot',sn:'BeautyHealth'},
+    {n:'Suplemen Zinc Selenium Imunitas',p:79000,s:14200,t:'hot',sn:'ImunShop'},
+    {n:'Vitamin D3 1000IU + K2 60 Kapsul',p:95000,s:11200,t:'hot',sn:'VitD3Shop'},
+    {n:'Obat Herbal Temulawak Curcumin',p:55000,s:16800,t:'hot',sn:'HerbalIn'},
+    {n:'Oximeter Pulse Fingertip Akurat',p:135000,s:4100,t:'trending',sn:'MedTools'},
   ],
 };
 
-// Build gambar URL menggunakan Unsplash Source
-function getImgUrl(product) {
-  // Jika sudah ada img query spesifik, gunakan itu
-  if (product.img) {
-    return `https://source.unsplash.com/300x300/?${encodeURIComponent(product.img)}`;
+// Fungsi gambar: pakai picsum.photos dengan ID spesifik per index & kategori
+function getImgUrl(cat, index, isReal, realImgCode) {
+  // Jika data real dari Shopee dan ada kode gambar
+  if (isReal && realImgCode) {
+    return `https://cf.shopee.co.id/file/${realImgCode}`;
   }
-  // Cari dari IMG_QUERIES berdasarkan nama produk
-  const name = product.name || product.n || '';
-  const nameLower = name.toLowerCase();
-  for (const [key, query] of Object.entries(IMG_QUERIES)) {
-    if (nameLower.includes(key)) {
-      return `https://source.unsplash.com/300x300/?${encodeURIComponent(query)}`;
-    }
-  }
-  // Fallback: gunakan nama produk langsung
-  const q = nameLower.split(' ').slice(0,3).join('+');
-  return `https://source.unsplash.com/300x300/?${encodeURIComponent(q+'+product')}`;
+  // Data kuratif: pakai picsum dengan ID spesifik
+  const ids = CAT_IMG_IDS[cat] || CAT_IMG_IDS['Fashion Wanita'];
+  const id = ids[index % ids.length];
+  // Pakai format /id/{n}/300/300 — paling reliable, tidak pakai seed
+  return `https://picsum.photos/id/${id}/300/300`;
+}
+
+// Buat SVG placeholder sebagai fallback gambar
+function makePlaceholder(cat, name) {
+  const color = CAT_COLORS[cat] || '#F5F5F5';
+  const icon = CAT_ICONS[cat] || '🛍️';
+  const shortName = name ? name.substring(0,20) : cat;
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='300' height='300' fill='${color}'/><text x='150' y='130' font-size='60' text-anchor='middle' dominant-baseline='middle'>${icon}</text><text x='150' y='185' font-size='13' font-family='sans-serif' text-anchor='middle' fill='%23666' dominant-baseline='middle'>${shortName}</text></svg>`)}`;
 }
 
 window.onload = () => {
@@ -646,6 +640,7 @@ function toggleEye(id, btn) {
   el.type = el.type === 'password' ? 'text' : 'password';
   btn.textContent = el.type === 'password' ? '👁️' : '🙈';
 }
+
 function saveKeys() {
   KLING_KEY = document.getElementById('klingKey').value.trim();
   CLAUDE_KEY = document.getElementById('claudeKey').value.trim();
@@ -653,16 +648,19 @@ function saveKeys() {
   document.getElementById('keyModal').classList.add('hidden');
   updateKeyUI(); toast('✅ API Keys tersimpan!');
 }
+
 function updateKeyUI() {
   [document.getElementById('kDot'), document.getElementById('kDot2')].forEach(d => { if(d) d.className = KLING_KEY ? 'dot ok' : 'dot err'; });
   if(document.getElementById('kSt')) document.getElementById('kSt').textContent = KLING_KEY ? KLING_KEY.substring(0,8)+'••••••' : 'Belum dikonfigurasi';
   if(document.getElementById('kSt2')) document.getElementById('kSt2').textContent = KLING_KEY ? 'Kling AI aktif ✓' : 'Kling AI Key belum diset';
 }
+
 function goTab(name, el) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('pg-' + name).classList.add('active'); el.classList.add('active');
 }
+
 function setPer(el, p) {
   document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
   el.classList.add('active'); selPer = p;
@@ -674,7 +672,7 @@ async function loadProds() {
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner-sm"></div>Mencari...';
   document.getElementById('prodResults').innerHTML =
-    `<div class="loading-w"><div class="spinner"></div><div class="loading-txt">Menyiapkan data produk...</div></div>`;
+    `<div class="loading-w"><div class="spinner"></div><div class="loading-txt">Memuat data produk...</div></div>`;
 
   const kw = (document.getElementById('kwInput').value.trim() || '').toLowerCase();
   let products = [], source = 'curated';
@@ -684,11 +682,12 @@ async function loadProds() {
     const q = kw || selCat;
     const sortBy = selPer === 'trending' ? 'ctime' : 'sales';
     const shopUrl = `https://shopee.co.id/api/v4/search/search_items?by=${sortBy}&keyword=${encodeURIComponent(q)}&limit=24&newest=0&order=desc&page_type=search&scenario=PAGE_GLOBAL_SEARCH&version=2`;
-    const proxyUrl = `https://thingproxy.freeboard.io/fetch/${shopUrl}`;
 
     const resp = await new Promise((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error('timeout')), 9000);
-      fetch(proxyUrl).then(r => { clearTimeout(timer); resolve(r); }).catch(e => { clearTimeout(timer); reject(e); });
+      fetch(`https://thingproxy.freeboard.io/fetch/${shopUrl}`)
+        .then(r => { clearTimeout(timer); resolve(r); })
+        .catch(e => { clearTimeout(timer); reject(e); });
     });
 
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
@@ -703,23 +702,19 @@ async function loadProds() {
       const sold = m.historical_sold || m.sold || 0;
       const shopid = m.shopid || 0, itemid = m.itemid || 0;
       const imgCode = m.image || '';
-      // Gunakan gambar Shopee langsung jika ada, fallback ke Unsplash
-      const img = imgCode
-        ? `https://cf.shopee.co.id/file/${imgCode}`
-        : getImgUrl({ name: m.name || '' });
       const type = sold > 5000 ? 'winning' : sold > 800 ? 'hot' : 'trending';
       return {
         name: (m.name || 'Produk Shopee').substring(0, 80),
         price: price > 0 ? price : Math.floor(Math.random() * 150 + 30) * 1000,
-        sold, img, score: Math.min(99, Math.max(60, Math.round(60 + sold / 300))),
+        sold, imgCode, imgIndex: i,
+        score: Math.min(99, Math.max(60, Math.round(60 + sold / 300))),
         type, shopUrl: `https://shopee.co.id/product/${shopid}/${itemid}`,
-        shopid: String(shopid), itemid: String(itemid), shopname: m.shop_name || ''
+        shopid: String(shopid), itemid: String(itemid), shopname: m.shop_name || '', isReal: true
       };
     }).filter(p => p.name.length > 2);
     source = 'real';
 
   } catch (e) {
-    // Fallback ke data kuratif
     products = getCurated(kw);
     source = 'curated';
   }
@@ -733,7 +728,6 @@ function getCurated(kw) {
   const base = CURATED[selCat] || CURATED['Fashion Wanita'];
   let data = kw ? base.filter(d => d.n.toLowerCase().includes(kw)) : base;
 
-  // Jika keyword tidak cocok di kategori ini, cari di semua kategori
   if (!data.length && kw) {
     for (const [cat, items] of Object.entries(CURATED)) {
       const found = items.filter(d => d.n.toLowerCase().includes(kw));
@@ -741,28 +735,26 @@ function getCurated(kw) {
     }
   }
 
-  // Jika masih tidak ada, buat produk dari keyword
   if (!data.length && kw) {
     const sufixes = ['Premium Original','Murah Terlaris','Viral 2024','Best Seller','Promo Hari Ini','Flash Sale','Kualitas Terjamin','Gratis Ongkir','COD Tersedia','Termurah'];
-    const types = ['winning','winning','hot','hot','hot','trending','trending','trending','trending','trending'];
-    data = sufixes.map((s, i) => ({
-      n: `${kw.charAt(0).toUpperCase()+kw.slice(1)} ${s}`,
-      p: [89000,75000,125000,199000,55000,145000,99000,65000,79000,49000][i],
-      s: [12400,9800,8200,7600,6400,5800,4900,4200,3800,3400][i],
-      t: types[i], sn: ['TopSeller','BestShop','ViralStore','TrustShop','FlashStore','QualityShop','ValueMart','FreeShip','CODStore','CheapStore'][i],
-      img: kw + '+product+indonesia'
+    const types  = ['winning','winning','hot','hot','hot','trending','trending','trending','trending','trending'];
+    const shops  = ['TopSeller','BestShop','ViralStore','TrustShop','FlashStore','QualityShop','ValueMart','FreeShip','CODStore','CheapStore'];
+    data = sufixes.map((s,i) => ({
+      n:`${kw.charAt(0).toUpperCase()+kw.slice(1)} ${s}`,
+      p:[89000,75000,125000,199000,55000,145000,99000,65000,79000,49000][i],
+      s:[12400,9800,8200,7600,6400,5800,4900,4200,3800,3400][i],
+      t:types[i], sn:shops[i]
     }));
   }
 
   const mult = {harian:1,mingguan:7,bulanan:30,winning:2,trending:1.5};
   const m = mult[selPer] || 1;
   return data.map((d, i) => ({
-    name: d.n, price: d.p,
-    sold: Math.round(d.s * m),
-    img: getImgUrl(d),
+    name: d.n, price: d.p, sold: Math.round(d.s * m),
+    imgCode: '', imgIndex: i,
     score: Math.max(65, 98 - i * 3), type: d.t,
     shopUrl: `https://shopee.co.id/search?keyword=${encodeURIComponent(d.n)}`,
-    shopid: '', itemid: '', shopname: d.sn || ''
+    shopid: '', itemid: '', shopname: d.sn || '', isReal: false
   }));
 }
 
@@ -787,13 +779,17 @@ function renderProds(prods, source) {
     const pf = 'Rp '+p.price.toLocaleString('id-ID');
     const bw = Math.min(99, p.score||70);
     const nm = p.name.replace(/'/g,'&#39;').replace(/"/g,'&quot;');
-    const imgUrl = p.img || `https://source.unsplash.com/300x300/?product+indonesia`;
+
+    // Gambar: real dari Shopee CDN, atau picsum ID tetap
+    const imgUrl = getImgUrl(selCat, p.imgIndex !== undefined ? p.imgIndex : i, p.isReal, p.imgCode);
+    const fallback = makePlaceholder(selCat, p.name);
     const imgSafe = imgUrl.replace(/'/g,'%27');
 
     html += `<div class="pc">
-      <div class="pc-img">
+      <div class="pc-img" style="background:${CAT_COLORS[selCat]||'#f5f5f5'}">
         <img src="${imgUrl}" alt="${nm}" loading="lazy"
-          onerror="this.src='https://source.unsplash.com/300x300/?product+shopping'">
+          onerror="this.onerror=null;this.src='${fallback}'"
+          style="width:100%;height:100%;object-fit:cover;display:block">
         <div class="pc-rank ${rc}">${i+1}</div>
         <div class="pc-badge ${bc}">${bl}</div>
         <div class="pc-hover-btns">
@@ -855,16 +851,15 @@ function editImg(imgUrl, name) {
   document.querySelectorAll('.tab')[1].classList.add('active');
   prodForContent = name;
   const img = new Image(); img.crossOrigin = 'anonymous';
-  img.onload = () => { imgOrig = img; document.getElementById('edCard').style.display = 'block'; renderCanvas(); };
-  img.onerror = () => toast('⚠️ Gagal load – upload manual');
+  img.onload = () => { imgOrig = img; document.getElementById('edCard').style.display='block'; renderCanvas(); };
+  img.onerror = () => toast('⚠️ Gagal load – upload foto manual');
   img.src = imgUrl;
 }
 
-// PHOTO EDITOR
 function loadPhoto(e) {
   const f = e.target.files[0]; if(!f) return;
   const r = new FileReader();
-  r.onload = ev => { const img = new Image(); img.onload = () => { imgOrig = img; document.getElementById('edCard').style.display='block'; renderCanvas(); }; img.src = ev.target.result; };
+  r.onload = ev => { const img = new Image(); img.onload = () => { imgOrig=img; document.getElementById('edCard').style.display='block'; renderCanvas(); }; img.src=ev.target.result; };
   r.readAsDataURL(f);
 }
 
@@ -873,8 +868,8 @@ function renderCanvas() {
   const canvas = document.getElementById('photoCanvas');
   const maxW = Math.min(window.innerWidth-60,480);
   const ratio = imgOrig.height/imgOrig.width;
-  canvas.width = maxW; canvas.height = maxW*ratio;
-  const ctx = canvas.getContext('2d');
+  canvas.width=maxW; canvas.height=maxW*ratio;
+  const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(curBg!=='orig'){
     const bgC={white:'#fff',red:'#EE4D2D',orange:'#FF9500',yellow:'#FFD700',blue:'#2980B9'};
@@ -926,23 +921,24 @@ function setBadge(btn,b){btn.closest('.filt-sc').querySelectorAll('.fb').forEach
 function dlPhoto(){if(!imgOrig){toast('⚠️ Upload foto dulu');return;}const c=document.getElementById('photoCanvas');const a=document.createElement('a');a.download='shopee-edited.jpg';a.href=c.toDataURL('image/jpeg',.93);a.click();toast('✅ Foto diunduh!');}
 function toContent(){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('pg-content').classList.add('active');document.querySelectorAll('.tab')[2].classList.add('active');if(prodForContent)document.getElementById('tp').value=prodForContent;toast('✍️ Pindah ke Judul & Harga');}
 
-// AI
 async function genTitle(){
   const prod=document.getElementById('tp').value; if(!prod){toast('⚠️ Masukkan nama produk!');return;}
   const btn=document.getElementById('tBtn'),out=document.getElementById('tOut');
   out.style.display='block';out.innerHTML='<span class="ai-ld">🤖 Membuat judul terbaik...</span>';btn.disabled=true;
-  try{const r=await claudeAI(`Buat 5 judul produk Shopee SEO-friendly:\nProduk: ${prod}\nKategori: ${document.getElementById('tc').value}\nFitur: ${document.getElementById('tf').value||'-'}\nSyarat: 40-70 karakter, kata kunci populer, daya tarik. Format: nomor 1-5 lalu hashtag. Bahasa Indonesia.`);out.innerHTML=r;}
+  try{const r=await claudeAI(`Buat 5 judul produk Shopee SEO-friendly:\nProduk: ${prod}\nKategori: ${document.getElementById('tc').value}\nFitur: ${document.getElementById('tf').value||'-'}\nSyarat: 40-70 karakter, kata kunci populer. Format: nomor 1-5 lalu hashtag. Bahasa Indonesia.`);out.innerHTML=r;}
   catch{out.innerHTML=`1. ${prod} Premium Original Terlaris – Kualitas Terjamin\n2. [BEST SELLER] ${prod} – Gratis Ongkir COD\n3. ${prod} Murah Berkualitas Best Seller Shopee\n4. PROMO ${prod} Original – Harga Termurah!\n5. ${prod} Premium Terpercaya – Garansi Uang Kembali\n\n🏷️ #${prod.replace(/ /g,'')} #shopeeterlaris`;}
   btn.disabled=false;
 }
+
 async function genDesc(){
   const info=document.getElementById('dI').value; if(!info){toast('⚠️ Masukkan info produk!');return;}
   const btn=document.getElementById('dBtn'),out=document.getElementById('dOut');
   out.style.display='block';out.innerHTML='<span class="ai-ld">🤖 Membuat deskripsi...</span>';btn.disabled=true;
-  try{const r=await claudeAI(`Buat deskripsi produk Shopee menarik:\n${info}\n\nFormat: pembuka menarik, keunggulan (bullet+emoji), spesifikasi, info pembelian, CTA. Bahasa Indonesia persuasif.`);out.innerHTML=r;}
+  try{const r=await claudeAI(`Buat deskripsi produk Shopee menarik:\n${info}\n\nFormat: pembuka, keunggulan (bullet+emoji), spesifikasi, info pembelian, CTA. Bahasa Indonesia persuasif.`);out.innerHTML=r;}
   catch{out.innerHTML=`✨ Produk terbaik pilihan Anda!\n\n🌟 KEUNGGULAN:\n• Kualitas premium terjamin\n• Bahan pilihan berkualitas\n\n📦 DETAIL:\n${info}\n\n🚚 COD & Transfer | Kirim 1-2 hari | Garansi 100%\n💬 Chat sekarang! ✅`;}
   btn.disabled=false;
 }
+
 function calcP(){
   const cost=parseFloat(document.getElementById('hM').value); if(!cost){toast('⚠️ Masukkan harga modal!');return;}
   const mg={fashion:{p:.40,s:.65,r:.90},beauty:{p:.50,s:.80,r:1.10},electronics:{p:.20,s:.35,r:.55},food:{p:.30,s:.55,r:.75},home:{p:.35,s:.60,r:.85}};
@@ -953,52 +949,51 @@ function calcP(){
   el.innerHTML=`<div class="price-trio"><div class="p-card"><div class="p-lbl">Harga Min</div><div class="p-val">${fmt(lo)}</div><div class="p-note">BEP + margin kecil</div></div><div class="p-card best"><div class="p-lbl">⭐ Optimal</div><div class="p-val">${fmt(mid)}</div><div class="p-note">Profit ${pp}% / ${fmt(mid-cost)}</div></div><div class="p-card"><div class="p-lbl">Premium</div><div class="p-val">${fmt(hi)}</div><div class="p-note">Branding kuat</div></div></div><div style="margin-top:9px;font-size:12px;color:var(--tx3);line-height:1.8">💡 Harga coret: ${fmt(Math.ceil(mid*1.2/1000)*1000)} → ${fmt(mid)}<br>🚚 Tambahkan Rp8.000–15.000 subsidi ongkir</div>`;
 }
 
-// KLING AI
 function loadVImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{vImgB64=ev.target.result.split(',')[1];document.getElementById('vImgPrev').innerHTML=`<img src="${ev.target.result}" style="max-height:110px;border-radius:7px;object-fit:contain">`;};r.readAsDataURL(f);}
 function setVT(btn,t){document.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selVT=t;}
 
 async function genKling(){
   if(!KLING_KEY){toast('⚠️ Masukkan Kling AI Key dulu!');document.getElementById('keyModal').classList.remove('hidden');return;}
   if(!vImgB64){toast('⚠️ Upload gambar produk dulu!');return;}
-  const btn=document.getElementById('vBtn');btn.disabled=true;btn.innerHTML='<div class="spinner-sm"></div>Mengirim ke Kling AI...';
+  const btn=document.getElementById('vBtn');btn.disabled=true;btn.innerHTML='<div class="spinner-sm"></div>Mengirim...';
   const res=document.getElementById('klingRes');res.style.display='block';
   const prog=document.getElementById('kProg'),stat=document.getElementById('kStat');
-  const pmap={product_showcase:'smooth product showcase camera movement professional studio lighting',zoom_rotate:'360 degree slow rotation product shot professional e-commerce',unboxing:'product unboxing animation elegant reveal',lifestyle:'lifestyle product photography natural setting aesthetic warm',promo:'dynamic promotional flash sale bright vivid colors',before_after:'before after transformation split screen'};
+  const pmap={product_showcase:'smooth product showcase camera movement professional studio lighting',zoom_rotate:'360 degree slow rotation product shot professional',unboxing:'product unboxing animation elegant reveal',lifestyle:'lifestyle product photography natural aesthetic warm',promo:'dynamic promotional flash sale bright colors',before_after:'before after transformation split screen'};
   const extra=document.getElementById('vPrompt').value;
   const prompt=pmap[selVT]+(extra?', '+extra:'')+', high quality shopee product video';
   try{
     stat.textContent='Membuat task...';prog.style.width='15%';
     const cr=await fetch('https://api.klingai.com/v1/videos/image2video',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${KLING_KEY}`},body:JSON.stringify({model_name:'kling-v1',image:`data:image/jpeg;base64,${vImgB64}`,prompt,negative_prompt:'blurry low quality distorted',cfg_scale:0.5,mode:'std',duration:parseInt(document.getElementById('vDur').value),aspect_ratio:document.getElementById('vRatio').value})});
     if(!cr.ok){const ed=await cr.json().catch(()=>({}));throw new Error(ed.message||`HTTP ${cr.status}`);}
-    const cd=await cr.json(); const tid=cd?.data?.task_id; if(!tid)throw new Error('Tidak dapat task_id');
-    stat.textContent='Task dibuat – Memproses...';prog.style.width='30%';
+    const cd=await cr.json();const tid=cd?.data?.task_id;if(!tid)throw new Error('Tidak dapat task_id');
+    stat.textContent='Memproses...';prog.style.width='30%';
     let vUrl=null,att=0;
     while(att<40&&!vUrl){
       await new Promise(r=>setTimeout(r,5000));att++;
       prog.style.width=Math.min(30+(att/40)*60,90)+'%';
-      stat.textContent=`Memproses... (${att*5}s / ~120s)`;
+      stat.textContent=`Memproses... (${att*5}s)`;
       const pr=await fetch(`https://api.klingai.com/v1/videos/image2video/${tid}`,{headers:{'Authorization':`Bearer ${KLING_KEY}`}});
-      if(!pr.ok)continue; const pd=await pr.json();
+      if(!pr.ok)continue;const pd=await pr.json();
       if(pd?.data?.task_status==='succeed'){vUrl=pd?.data?.task_result?.videos?.[0]?.url;break;}
-      if(pd?.data?.task_status==='failed')throw new Error('Kling gagal: '+(pd?.data?.task_status_msg||'unknown'));
+      if(pd?.data?.task_status==='failed')throw new Error('Kling gagal');
     }
-    if(!vUrl)throw new Error('Timeout – coba lagi');
+    if(!vUrl)throw new Error('Timeout');
     prog.style.width='100%';
-    setTimeout(()=>{res.innerHTML=`<div style="padding:13px"><div style="font-weight:700;color:var(--green);margin-bottom:8px">🎉 Video berhasil!</div><video controls autoplay loop style="width:100%;border-radius:var(--rs);margin-bottom:10px" src="${vUrl}"></video><div style="display:flex;gap:8px"><a href="${vUrl}" download="video-produk.mp4" class="btn" style="text-decoration:none;padding:9px 15px;font-size:12px">⬇️ Download</a><button class="btn-sec" style="font-size:12px;padding:9px 15px" onclick="navigator.clipboard.writeText('${vUrl}').then(()=>toast('📋 URL disalin!'))">📋 Copy URL</button></div></div>`;},500);
+    setTimeout(()=>{res.innerHTML=`<div style="padding:13px"><div style="font-weight:700;color:var(--green);margin-bottom:8px">🎉 Video berhasil!</div><video controls autoplay loop style="width:100%;border-radius:var(--rs);margin-bottom:10px" src="${vUrl}"></video><div style="display:flex;gap:8px"><a href="${vUrl}" download="video-produk.mp4" class="btn" style="text-decoration:none;padding:9px 15px;font-size:12px">⬇️ Download</a></div></div>`;},500);
   }catch(err){
     prog.style.width='100%';prog.style.background='#E74C3C';stat.textContent='❌ '+err.message;toast('❌ Error: '+err.message);
-    res.innerHTML+=`<div style="padding:11px;font-size:12px;color:#C0392B;background:#FDEAEA;margin:0 8px 8px;border-radius:var(--rs)"><b>Error:</b> ${err.message}<br><br>• Cek API Key Kling AI<br>• Cek saldo/credit<br>• Format JPG/PNG</div>`;
+    res.innerHTML+=`<div style="padding:11px;font-size:12px;color:#C0392B;background:#FDEAEA;margin:0 8px 8px;border-radius:var(--rs)"><b>Error:</b> ${err.message}</div>`;
   }
   btn.disabled=false;btn.innerHTML='🎬 Generate Video dengan Kling AI';
 }
 
 async function genScript(){
-  const prod=document.getElementById('sP').value; if(!prod){toast('⚠️ Masukkan nama produk!');return;}
+  const prod=document.getElementById('sP').value;if(!prod){toast('⚠️ Masukkan nama produk!');return;}
   const btn=document.getElementById('sBt'),out=document.getElementById('sOut');
   out.style.display='block';out.innerHTML='<span class="ai-ld">🤖 Membuat script...</span>';btn.disabled=true;
   const dur=document.getElementById('sDur').value,type=document.getElementById('sT').value;
-  try{const r=await claudeAI(`Script video ${type} produk "${prod}" durasi ${dur} detik. Format: [DETIK XX-XX] JUDUL\nAksi + Dialog. Hook 3 detik, konten, CTA. Tips musik di akhir. Bahasa Indonesia.`);out.innerHTML=r;}
-  catch{out.innerHTML=`🎬 SCRIPT – ${prod}\n\n[00-03] ⚡ HOOK\n"Wajib lihat sebelum beli ${prod}!"\n\n[03-${Math.floor(parseInt(dur)*.5)}] 📦 TAMPIL PRODUK\nClose-up + packaging detail\n\n[${Math.floor(parseInt(dur)*.5)}-${parseInt(dur)-4}] ✨ DEMO\nFitur unggulan produk\n\n[${parseInt(dur)-4}-${dur}] 🛒 CTA\n"Order sekarang! Link di bio!"\n\n🎵 Gunakan musik trending TikTok!`;}
+  try{const r=await claudeAI(`Script video ${type} produk "${prod}" durasi ${dur} detik. Format: [DETIK XX-XX] JUDUL\nAksi+Dialog. Hook 3 detik, konten, CTA. Tips musik. Bahasa Indonesia.`);out.innerHTML=r;}
+  catch{out.innerHTML=`🎬 SCRIPT – ${prod}\n\n[00-03] HOOK\n"Wajib lihat sebelum beli ${prod}!"\n\n[03-${Math.floor(parseInt(dur)*.5)}] TAMPIL PRODUK\nClose-up + packaging\n\n[${Math.floor(parseInt(dur)*.5)}-${parseInt(dur)-4}] DEMO\nFitur unggulan\n\n[${parseInt(dur)-4}-${dur}] CTA\n"Order sekarang! Link di bio!"\n\n🎵 Gunakan musik trending TikTok!`;}
   btn.disabled=false;
 }
 
